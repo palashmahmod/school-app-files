@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>মেইন ড্যাশবোর্ড - ফাইল C</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { 
+            /* হোম মেনুর সাথে মিল রেখে ব্যাকগ্রাউন্ড */
+            --bg-gradient: linear-gradient(135deg, #4b6681 0%, #31475e 100%);
+            --white: #ffffff;
+            --primary-blue: #1a73e8;
+            --accent: #2ecc71;
+            --warning: #f1c40f;
+            --info: #00bcd4;
+            --text-dark: #2c3e50;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            background: var(--bg-gradient); 
+            background-attachment: fixed;
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
+        }
+
+        .header { 
+            text-align: center; 
+            padding: 30px 20px; 
+            color: var(--white);
+        }
+        .header h1 { font-size: 22px; font-weight: 800; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
+
+        .container { max-width: 480px; margin: 0 auto; padding: 0 20px; width: 100%; box-sizing: border-box; }
+        
+        .menu-list { display: flex; flex-direction: column; gap: 20px; }
+
+        /* --- ৩ডি মেনু কার্ডস (লিস্ট ভিউ) --- */
+        .menu-card { 
+            background: var(--white); 
+            padding: 18px; 
+            border-radius: 20px; 
+            text-decoration: none; 
+            color: var(--text-dark); 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            transition: all 0.2s ease; 
+            /* নিচে ও ডানে প্রফেশনাল ৩ডি শ্যাডো */
+            box-shadow: 8px 8px 15px rgba(0,0,0,0.4); 
+            border: none;
+            position: relative;
+        }
+
+        /* হোভার এবং একটিভ ইফেক্ট */
+        .menu-card:hover { transform: translate(-2px, -2px); box-shadow: 10px 10px 20px rgba(0,0,0,0.5); }
+        .menu-card:active { transform: translate(6px, 6px); box-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
+
+        .icon-circle { 
+            width: 50px; height: 50px; border-radius: 15px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 22px; color: #fff; flex-shrink: 0;
+            box-shadow: 3px 3px 8px rgba(0,0,0,0.1);
+        }
+
+        /* বাটন আইকন কালার */
+        .btn-ca .icon-circle { background: var(--accent); }
+        .btn-cb .icon-circle { background: var(--warning); }
+        .btn-ce .icon-circle { background: var(--info); }
+        .btn-cd .icon-circle { background: var(--primary-blue); }
+
+        .menu-text { flex-grow: 1; }
+        .menu-text span { display: block; font-weight: 700; font-size: 15px; color: var(--text-dark); margin-bottom: 2px; }
+        .menu-text small { color: #5f6368; font-size: 11px; font-weight: 600; display: block; line-height: 1.3; }
+
+        /* --- ব্যাক বাটন --- */
+        .back-link { 
+            display: block; text-align: center; margin-top: 40px; 
+            text-decoration: none; color: var(--white); background: rgba(255, 255, 255, 0.1);
+            font-weight: bold; font-size: 14px; padding: 15px; 
+            border-radius: 50px; backdrop-filter: blur(8px);
+            transition: 0.3s; box-shadow: 5px 5px 12px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .back-link:hover { background: #d93025; transform: translateY(-2px); }
+        .back-link:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .footer { 
+            text-align: center; margin-top: auto; font-size: 10px; 
+            color: rgba(255,255,255,0.5); font-weight: 700; letter-spacing: 2px;
+            padding: 30px 0; text-transform: uppercase;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1><i class="fas fa-sliders" style="margin-right: 10px;"></i> কন্ট্রোল প্যানেল (C)</h1>
+</div>
+
+<div class="container">
+    <div class="menu-list">
+        
+        <a href="file_CA.html" class="menu-card btn-ca">
+            <div class="icon-circle"><i class="fas fa-edit"></i></div>
+            <div class="menu-text">
+                <span>ফলাফলের অন্যান্য তথ্য এন্ট্রি</span>
+                <small>বিবরণী টেবিলের অন্যান্য কলাম আপডেট করুন</small>
+            </div>
+            <i class="fas fa-chevron-right" style="color:#bdc1c6; font-size: 12px;"></i>
+        </a>
+
+        <a href="file_CB.html" class="menu-card btn-cb">
+            <div class="icon-circle"><i class="fas fa-layer-group"></i></div>
+            <div class="menu-text">
+                <span>শ্রেণি নির্ধারণ</span>
+                <small>শ্রেণি ও বিভাগ সেটআপ করুন (মাস্টার)</small>
+            </div>
+            <i class="fas fa-chevron-right" style="color:#bdc1c6; font-size: 12px;"></i>
+        </a>
+
+        <a href="file_CE.html" class="menu-card btn-ce">
+            <div class="icon-circle"><i class="fas fa-sitemap"></i></div>
+            <div class="menu-text">
+                <span>শাখা / বিভাগ নির্ধারণ</span>
+                <small>শ্রেণি অনুযায়ী শাখা নির্বাচন করুন</small>
+            </div>
+            <i class="fas fa-chevron-right" style="color:#bdc1c6; font-size: 12px;"></i>
+        </a>
+
+        <a href="file_CD.html" class="menu-card btn-cd">
+            <div class="icon-circle"><i class="fas fa-file-invoice"></i></div>
+            <div class="menu-text">
+                <span>ফলাফলের অন্যান্য বিবরণী</span>
+                <small>রিপোর্টের বিস্তারিত ও অন্যান্য তথ্য</small>
+            </div>
+            <i class="fas fa-chevron-right" style="color:#bdc1c6; font-size: 12px;"></i>
+        </a>
+
+    </div>
+
+    <a href="index.html" class="back-link">
+        <i class="fas fa-home" style="margin-right: 8px;"></i> হোম পেইজে ফিরে যান
+    </a>
+
+    <div class="footer">POWERED BY PALASH MAHMOD</div>
+</div>
+
+<script>
+    // মোবাইলের ব্যাক বাটন হ্যান্ডেল (আপনার পূর্বের লজিক)
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        window.location.replace("index.html");
+    };
+</script>
+
+</body>
+</html>

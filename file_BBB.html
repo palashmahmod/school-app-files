@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>৬ষ্ঠ-৮ম নম্বর এন্ট্রি - BBB</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { 
+            --bg-gradient: linear-gradient(135deg, #4b6681 0%, #31475e 100%);
+            --white: #ffffff;
+            --primary-purple: #673ab7;
+            --no-name-bg: #e3f2fd;
+            --text-dark: #2c3e50;
+            --success: #27ae60;
+            --danger: #e74c3c;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            background: var(--bg-gradient); 
+            background-attachment: fixed;
+            margin: 0; 
+            padding: 0; 
+            color: var(--text-dark);
+        }
+
+        /* স্টিকি টপ নেভিগেশন */
+        .entry-nav { 
+            position: sticky; top: 0; background: rgba(255, 255, 255, 0.95); 
+            padding: 12px; display: none; justify-content: space-around; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
+
+        .header-title { text-align: center; margin-bottom: 25px; color: var(--white); }
+        .header-title h2, .header-title h3 { margin: 0; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); font-weight: 800; }
+
+        /* বিষয় তালিকা কার্ড */
+        .subject-list { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .subject-btn { 
+            display: flex; justify-content: space-between; padding: 18px 22px; 
+            background: var(--white); border-radius: 18px; 
+            font-weight: 700; cursor: pointer; transition: 0.2s;
+            box-shadow: 6px 6px 12px rgba(0,0,0,0.3);
+            align-items: center; border: none; color: var(--text-dark);
+        }
+        .subject-btn:active { transform: translate(3px, 3px); box-shadow: 2px 2px 5px rgba(0,0,0,0.2); }
+        .subject-btn i { color: var(--primary-purple); font-size: 18px; }
+
+        /* এন্ট্রি কার্ড ও টেবিল */
+        #entrySection { display: none; margin-top: 10px; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .entry-card { 
+            background: var(--white); border-radius: 20px; padding: 10px; 
+            overflow-x: auto; box-shadow: 10px 10px 25px rgba(0,0,0,0.4);
+        }
+
+        table { width: 100%; border-collapse: collapse; min-width: 300px; }
+        th { background: #f8f9fa; padding: 12px 8px; font-size: 12px; border-bottom: 2px solid #eee; color: #666; }
+        td { padding: 8px 5px; text-align: center; border-bottom: 1px solid #f0f0f0; }
+
+        input[type="number"] { 
+            width: 55px; padding: 10px 2px; border: 1.5px solid #dde1e5; border-radius: 8px; 
+            text-align: center; font-weight: bold; font-size: 15px; outline: none; transition: 0.3s;
+        }
+        input:focus { border-color: var(--primary-purple); background: #fbf9ff; }
+
+        /* নাম না থাকলে নীল ব্যাকগ্রাউন্ড */
+        .box-no-name { background-color: var(--no-name-bg) !important; opacity: 0.7; }
+        .total-box { font-weight: 800; color: #000; background: #eee; padding: 8px; border-radius: 8px; min-width: 35px; display: inline-block; }
+
+        /* বাটন স্টাইল */
+        .btn { padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn:active { transform: scale(0.95); }
+        .btn-save { background: var(--success); box-shadow: 0 4px 0 #1e8449; }
+        .btn-clear { background: var(--danger); box-shadow: 0 4px 0 #b71c1c; width: 100%; justify-content: center; }
+        .btn-back { background: var(--text-dark); box-shadow: 0 4px 0 #000; }
+        
+        .action-area { margin-top: 30px; display: flex; flex-direction: column; gap: 15px; }
+
+        .footer-text { text-align: center; font-size: 10px; color: rgba(255,255,255,0.5); padding: 40px 0; letter-spacing: 2px; }
+
+    </style>
+</head>
+
+<body onload="init()">
+
+<div class="container" id="listSection">
+    <div class="header-title"><h2><i class="fas fa-file-signature"></i> নম্বর এন্ট্রি (BBB)</h2></div>
+    <div class="subject-list" id="subButtons"></div>
+
+    <div class="action-area">
+        <button class="btn btn-clear" onclick="clearAllSystem()"><i class="fas fa-trash-alt"></i> সকল নম্বর মুছে ফেলুন</button>
+        <a href="file_BB.html" class="btn btn-back" style="text-decoration: none; justify-content: center;"><i class="fas fa-arrow-left"></i> আগের পেইজে ফিরে যান</a>
+    </div>
+</div>
+
+<div class="entry-nav" id="topNav">
+    <button class="btn btn-back" onclick="hideEntry()"><i class="fas fa-arrow-left"></i> ফিরে যান</button>
+    <button class="btn btn-save" onclick="saveData()"><i class="fas fa-save"></i> সংরক্ষণ</button>
+</div>
+
+<div class="container" id="entrySection">
+    <div class="header-title"><h3 id="subjectTitle">বিষয় নাম</h3></div>
+    <div class="entry-card">
+        <table>
+            <thead><tr id="tableHeader"></tr></thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+    <div style="height: 50px;"></div> </div>
+
+<div class="footer-text">POWERED BY PALASH MAHMOD</div>
+
+<script>
+    const KEY = "school_v3_data";
+    let db = JSON.parse(localStorage.getItem(KEY)) || { s: {} };
+    let currentSubKey = ""; 
+
+    let subjects = [
+        { name: "বাংলা ১ম", key: "j_b1", parts: { cq: 70, mcq: 30 } },
+        { name: "বাংলা ২য়", key: "j_b2", parts: { cq: 35, mcq: 15 } },
+        { name: "ইংরেজি ১ম", key: "j_e1", parts: { total: 100 } },
+        { name: "ইংরেজি ২য়", key: "j_e2", parts: { total: 50 } },
+        { name: "গণিত", key: "j_math", parts: { cq: 70, mcq: 30 } },
+        { name: "বিজ্ঞান", key: "j_sci", parts: { cq: 70, mcq: 30 } },
+        { name: "বাঃ ও বিঃ", key: "j_bss", parts: { cq: 70, mcq: 30 } },
+        { name: "ধর্ম", key: "j_rel", parts: { cq: 70, mcq: 30 } },
+        { name: "তথ্য প্রযুক্তি", key: "j_ict", parts: { cq: 25, prac: 25 } }
+    ];
+
+    function init() {
+        let html = "";
+        subjects.forEach((s, index) => {
+            html += `<div class="subject-btn" onclick="showEntry(${index})"><span>${s.name}</span><i class="fas fa-chevron-right"></i></div>`;
+        });
+        document.getElementById('subButtons').innerHTML = html;
+    }
+
+    function showEntry(index) {
+        let s = subjects[index];
+        currentSubKey = s.key;
+        document.getElementById('subjectTitle').innerText = s.name;
+        document.getElementById('listSection').style.display = "none";
+        document.getElementById('entrySection').style.display = "block";
+        document.getElementById('topNav').style.display = "flex";
+        renderTable(s);
+        window.scrollTo(0,0);
+    }
+
+    function hideEntry() {
+        document.getElementById('listSection').style.display = "block";
+        document.getElementById('entrySection').style.display = "none";
+        document.getElementById('topNav').style.display = "none";
+    }
+
+    function renderTable(s) {
+        let header = `<th>রোল</th>`;
+        if(s.parts.cq) header += `<th>CQ</th>`;
+        if(s.parts.mcq) header += `<th>MCQ</th>`;
+        if(s.parts.prac) header += `<th>PR</th>`;
+        if(s.parts.total) header += `<th>প্রাপ্ত</th>`;
+        header += `<th>মোট</th>`;
+        document.getElementById('tableHeader').innerHTML = header;
+
+        let body = "";
+        if(!db[currentSubKey]) db[currentSubKey] = {};
+        let lastRoll = 0;
+        for(let r=150; r>=1; r--) {
+            if(db.s && db.s[r] && db.s[r].trim() !== "") { lastRoll = r; break; }
+        }
+        if(lastRoll === 0) lastRoll = 10;
+
+        for(let i=1; i<=lastRoll; i++) {
+            let hasName = (db.s && db.s[i] && db.s[i].trim() !== "");
+            let d = db[currentSubKey][i] || {cq:"", mcq:"", prac:"", total:""};
+            let rowClass = hasName ? "" : "box-no-name";
+            let readOnly = hasName ? "" : "disabled";
+
+            body += `<tr class="${rowClass}"><td>${toB(i)}</td>`;
+            if(s.parts.cq) body += `<td><input type="number" id="cq_${i}" value="${hasName?d.cq:''}" ${readOnly} oninput="calc(${i})"></td>`;
+            if(s.parts.mcq) body += `<td><input type="number" id="mcq_${i}" value="${hasName?d.mcq:''}" ${readOnly} oninput="calc(${i})"></td>`;
+            if(s.parts.prac) body += `<td><input type="number" id="prac_${i}" value="${hasName?d.prac:''}" ${readOnly} oninput="calc(${i})"></td>`;
+            if(s.parts.total) body += `<td><input type="number" id="total_${i}" value="${hasName?d.total:''}" ${readOnly} oninput="calc(${i})"></td>`;
+            body += `<td><span class="total-box" id="sum_${i}">${hasName?calculateTotal(d):'০'}</span></td></tr>`;
+        }
+        document.getElementById('tableBody').innerHTML = body;
+    }
+
+    function calc(i) {
+        let rowData = {
+            cq: document.getElementById(`cq_${i}`) ? document.getElementById(`cq_${i}`).value : "",
+            mcq: document.getElementById(`mcq_${i}`) ? document.getElementById(`mcq_${i}`).value : "",
+            prac: document.getElementById(`prac_${i}`) ? document.getElementById(`prac_${i}`).value : "",
+            total: document.getElementById(`total_${i}`) ? document.getElementById(`total_${i}`).value : ""
+        };
+        document.getElementById(`sum_${i}`).innerText = calculateTotal(rowData);
+    }
+
+    function calculateTotal(d) {
+        let sum = (parseFloat(d.cq)||0) + (parseFloat(d.mcq)||0) + (parseFloat(d.prac)||0) + (parseFloat(d.total)||0);
+        return sum > 0 ? sum : "০";
+    }
+
+    function saveData() {
+        for(let i=1; i<=150; i++) {
+            let hasName = (db.s && db.s[i] && db.s[i].trim() !== "");
+            if(hasName) {
+                db[currentSubKey][i] = {
+                    cq: document.getElementById(`cq_${i}`) ? document.getElementById(`cq_${i}`).value : "",
+                    mcq: document.getElementById(`mcq_${i}`) ? document.getElementById(`mcq_${i}`).value : "",
+                    prac: document.getElementById(`prac_${i}`) ? document.getElementById(`prac_${i}`).value : "",
+                    total: document.getElementById(`total_${i}`) ? document.getElementById(`total_${i}`).value : ""
+                };
+            }
+        }
+        localStorage.setItem(KEY, JSON.stringify(db));
+        alert("সফলভাবে তথ্য সংরক্ষিত হয়েছে!");
+    }
+
+    function clearAllSystem() {
+        if(confirm("এই বিভাগের সকল নম্বর মুছে যাবে! আপনি কি নিশ্চিত?")) {
+            subjects.forEach(s => db[s.key] = {});
+            localStorage.setItem(KEY, JSON.stringify(db));
+            alert("সব তথ্য মুছে ফেলা হয়েছে।");
+            location.reload();
+        }
+    }
+    function toB(n) { return n.toString().padStart(2, '0').split('').map(x => ['০','১','২','৩','৪','৫','৬','৭','৮','৯'][x]).join(''); }
+</script>
+</body>
+</html>

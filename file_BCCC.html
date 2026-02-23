@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>মানবিক বিভাগ ফলাফল বিবরণী (BCCC)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { 
+            --bg-gradient: linear-gradient(135deg, #4b6681 0%, #31475e 100%);
+            --white: #ffffff;
+            --primary: #d32f2f; 
+        }
+
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background: var(--bg-gradient); 
+            background-attachment: fixed;
+            margin: 0; padding: 10px; 
+            min-height: 100vh;
+        }
+
+        .header-title { text-align: center; color: var(--white); margin-bottom: 15px; }
+        .header-title h2 { margin: 0; font-size: 20px; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
+
+        /* আগের সেই সুন্দর টেবিল কন্টেইনার */
+        .table-wrapper { 
+            background: #fff; 
+            border-radius: 12px;
+            overflow: auto; 
+            height: 72vh; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border: 2px solid #333;
+        }
+
+        table { border-collapse: separate; border-spacing: 0; width: max-content; }
+
+        th, td { 
+            border: 1px solid #ccc; 
+            padding: 8px 10px; 
+            text-align: center; 
+            font-size: 13px; 
+            white-space: nowrap; 
+        }
+
+        /* হেডার ফ্রিজ */
+        th { 
+            background: #f1f3f4; 
+            position: sticky; top: 0; z-index: 100; 
+            color: #333; font-weight: bold;
+            border-bottom: 2px solid #333;
+        }
+
+        /* শুধু রোল ফ্রিজ (আপনার আগের ডিজাইন অনুযায়ী) */
+        th:nth-child(1), td:nth-child(1) { 
+            position: sticky; 
+            left: 0; 
+            background: #eee; 
+            z-index: 50; 
+            border-right: 2px solid #333; 
+        }
+
+        th:nth-child(1) { z-index: 110; }
+
+        .f-count { color: #d32f2f !important; font-weight: bold; background: #fff1f0 !important; }
+
+        /* বাটন সেকশন - আগের স্টাইল */
+        .btn-container { 
+            max-width: 900px; margin: 20px auto; 
+            display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+        }
+
+        .btn { 
+            padding: 10px 18px; border: none; border-radius: 8px; 
+            font-weight: bold; cursor: pointer; color: #fff; 
+            text-decoration: none; display: flex; align-items: center; 
+            gap: 8px; font-size: 13px; transition: 0.2s;
+            box-shadow: 0 4px 0px rgba(0,0,0,0.2);
+        }
+        .btn:active { transform: translateY(3px); box-shadow: none; }
+
+        .btn-excel { background: #0F9D58; box-shadow: 0 4px 0px #096d3d; }
+        .btn-copy { background: #28a745; box-shadow: 0 4px 0px #1e7e34; }
+        .btn-home { background: #1a73e8; box-shadow: 0 4px 0px #0d47a1; }
+        .btn-back { background: #333; box-shadow: 0 4px 0px #000; }
+
+    </style>
+</head>
+<body onload="initBCCC()">
+
+<div class="header-title">
+    <h2><i class="fas fa-table-list"></i> মানবিক বিভাগ ফলাফল বিবরণী (BCCC)</h2>
+</div>
+
+<div class="table-wrapper">
+    <table id="resultTable">
+        <thead><tr id="tableHead"></tr></thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
+
+<div class="btn-container">
+    <button id="sheetBtn" class="btn btn-excel" onclick="confirmAndSend()">
+        <i class="fas fa-file-excel"></i> গুগল শিটে পাঠান
+    </button>
+    
+    <a href="index.html" class="btn btn-home">
+        <i class="fas fa-home"></i> হোম মেনু
+    </a>
+
+    <button class="btn btn-copy" onclick="copyData()">
+        <i class="fas fa-copy"></i> তথ্য কপি করুন
+    </button>
+
+    <a href="file_BCC.html" class="btn btn-back">
+        <i class="fas fa-arrow-left"></i> আগের পেজ
+    </a>
+</div>
+
+<script>
+    // জাভাস্ক্রিপ্ট এবং ডাটা লজিক আগের মতোই থাকছে
+    const colNames = ["রোল", "শিক্ষার্থীর নাম", "বাঃ ১ম CQ", "বাঃ ১ম MCQ", "বাঃ ১ম মোট", "বাঃ ২য় CQ", "বাঃ ২য় MCQ", "বাঃ ২য় মোট", "বাংলা গ্রেড", "ইং ১ম", "ইং ২য়", "ইং গ্রেড", "গণিত CQ", "গণিত MCQ", "গণিত মোট", "গণিত গ্রেড", "ধর্ম CQ", "ধর্ম MCQ", "ধর্ম মোট", "ধর্ম গ্রেড", "বিজ্ঞান CQ", "বিজ্ঞান MCQ", "বিজ্ঞান মোট", "বিজ্ঞান গ্রেড", "ইতিহাস CQ", "ইতিহাস MCQ", "ফাঁকা", "ইতিহাস মোট", "ইতিহাস গ্রেড", "ভূগোল CQ", "ভূগোল MCQ", "ফাঁকা", "ভূগোল মোট", "ভূগোল গ্রেড", "পৌরনীতি CQ", "পৌরনীতি MCQ", "ফাঁকা", "পৌরনীতি মোট", "পৌরনীতি গ্রেড", "তথ্য MCQ", "তথ্য PR", "তথ্য মোট", "তথ্য গ্রেড", "গার্হস্থ্য CQ", "গার্হস্থ্য MCQ", "গার্হস্থ্য PR", "গার্হস্থ্য মোট", "গার্হস্থ্য গ্রেড", "মোট প্রাপ্ত নম্বর", "GPA", "মেধাস্থান", "মেধানুসারে রোল", "উপবৃত্তি", "রেজি নং", "জন্মতারিখ", "ফাঁকা", "অন্যান্য"];
+
+    function toB(n) { return n.toString().split('').map(x => ['০','১','২','৩','৪','৫','৬','৭','৮','৯'][x] || x).join(''); }
+    function fmtR(n) { return `'${toB(n.toString().padStart(2, '0'))}`; }
+
+    function getGP(m) {
+        if (m >= 80) return {g:"A+", p:5}; if (m >= 70) return {g:"A", p:4};
+        if (m >= 60) return {g:"A-", p:3.5}; if (m >= 50) return {g:"B", p:3};
+        if (m >= 40) return {g:"C", p:2}; if (m >= 33) return {g:"D", p:1};
+        return {g:"F", p:0};
+    }
+
+    function initBCCC() {
+        const db = JSON.parse(localStorage.getItem('school_v3_data')) || { s: {} };
+        const gpaLogicSetting = localStorage.getItem('bcca_gpa_logic') || "ssc_logic";
+        const students = db.s || {};
+        document.getElementById('tableHead').innerHTML = colNames.map((n, i) => `<th>${i+1}৷ ${n}</th>`).join('');
+
+        let lastRoll = 0;
+        for(let r=150; r>=1; r--) { if(students[r] && students[r].trim() !== "") { lastRoll = r; break; } }
+        
+        let resultData = [];
+        for(let r=1; r<=lastRoll; r++) {
+            let row = new Array(58).fill(""); 
+            const getV = (sub, part) => {
+                let val = db[sub]?.[r]?.[part];
+                return (val === "" || val === undefined) ? 0 : parseFloat(val);
+            };
+
+            row[1] = fmtR(r); row[2] = students[r] || "";
+            
+            let b1t = getV('hum_b1','cq')+getV('hum_b1','mcq'), b2t = getV('hum_b2','cq')+getV('hum_b2','mcq');
+            row[3]=getV('hum_b1','cq'); row[4]=getV('hum_b1','mcq'); row[5]=b1t;
+            row[6]=getV('hum_b2','cq'); row[7]=getV('hum_b2','mcq'); row[8]=b2t;
+            let bG = (getV('hum_b1','cq')<23 || getV('hum_b1','mcq')<10 || getV('hum_b2','cq')<23 || getV('hum_b2','mcq')<10) ? {g:"F", p:0} : getGP((b1t+b2t)/2);
+            row[9] = bG.g;
+
+            let e1 = getV('hum_e1','total'), e2 = getV('hum_e2','total');
+            row[10]=e1; row[11]=e2;
+            let eG = (e1 < 33 || e2 < 33) ? {g:"F", p:0} : getGP((e1+e2)/2);
+            row[12] = eG.g;
+
+            const setGenG = (k, c) => {
+                let cq=getV(k,'cq'), mq=getV(k,'mcq');
+                row[c]=cq; row[c+1]=mq; row[c+2]=cq+mq;
+                let res = (cq<23 || mq<10) ? {g:"F", p:0} : getGP(row[c+2]);
+                row[c+3]=res.g; return { ...res, m: cq+mq };
+            };
+            let mG=setGenG('hum_math', 13), rG=setGenG('hum_rel', 17), sG=setGenG('hum_sci', 21);
+
+            const setHumG = (k, c) => {
+                let cq=getV(k,'cq'), mq=getV(k,'mcq');
+                row[c]=cq; row[c+1]=mq; row[c+2]=""; 
+                row[c+3]=cq+mq;
+                let res = (cq<23 || mq<10) ? {g:"F", p:0} : getGP(row[c+3]);
+                row[c+4]=res.g; return { ...res, m: cq+mq };
+            };
+            let hisG=setHumG('hum_his', 25), geoG=setHumG('hum_geo', 30), civG=setHumG('hum_civ', 35);
+
+            let icMq=getV('hum_ict','mcq'), icPr=getV('hum_ict','prac');
+            row[40]=icMq; row[41]=icPr; row[42]=icMq+icPr;
+            let icG = (icMq<8 || icPr<8) ? {g:"F", p:0} : getGP(row[42]*2);
+            row[43]=icG.g;
+
+            let hmCq=getV('hum_hm','cq'), hmMq=getV('hum_hm','mcq'), hmPr=getV('hum_hm','prac');
+            row[44]=hmCq; row[45]=hmMq; row[46]=hmPr; row[47]=hmCq+hmMq+hmPr;
+            let hmG = (hmCq<17 || hmMq<8 || hmPr<8) ? {g:"F", p:0} : getGP(row[47]);
+            row[48]=hmG.g;
+
+            row[49] = row[5] + row[8] + row[10] + row[11] + row[15] + row[19] + row[23] + row[28] + row[33] + row[38] + row[42] + row[47];
+
+            let mainSubs = [bG, eG, mG, rG, sG, hisG, geoG, civG, icG];
+            let optSub = hmG;
+            let failCount = mainSubs.filter(x => x.g === "F").length;
+            if (optSub.g === "F") failCount++;
+
+            if (gpaLogicSetting === "no_logic") {
+                row[50] = failCount > 0 ? `F${failCount}` : "";
+            } else {
+                let mainFail = mainSubs.filter(x => x.g === "F").length;
+                if(mainFail > 0) { row[50] = `F${mainFail}`; } else {
+                    let totalGP = mainSubs.reduce((s, x) => s + x.p, 0);
+                    let extraPoints = Math.max(0, optSub.p - 2);
+                    let finalGPA = Math.min(5, (totalGP + extraPoints) / 9); 
+                    row[50] = finalGPA.toFixed(2);
+                }
+            }
+            row[53] = db.stipend?.[r] || ""; row[54] = db.reg?.[r] || ""; 
+            row[55] = db.dob?.[r] || ""; row[56] = ""; row[57] = db.other?.[r] || "";
+            resultData.push({ r, data: row, fCount: failCount, total: row[49] });
+        }
+
+        let meritSort = [...resultData].sort((a,b) => a.fCount - b.fCount || b.total - a.total || a.r - b.r);
+        meritSort.forEach((item, idx) => {
+            let m = idx + 1;
+            let obj = resultData.find(x => x.r === item.r);
+            obj.data[51] = m <= 10 ? ["১ম","২য়","৩য়","৪র্থ","৫ম","৬ষ্ঠ","৭ম","৮ম","৯ম","১০ম"][m-1] : toB(m)+"তম";
+            obj.data[52] = fmtR(m);
+        });
+
+        document.getElementById('tableBody').innerHTML = resultData.map(item => `
+            <tr>${item.data.slice(1).map(cell => {
+                let isF = cell && (cell.toString() === "F" || cell.toString().includes("F"));
+                return `<td class="${isF ? 'f-count' : ''}">${cell || ""}</td>`;
+            }).join('')}</tr>
+        `).join('');
+    }
+
+    function copyData() {
+        let text = Array.from(document.querySelectorAll('#tableBody tr')).map(tr => 
+            Array.from(tr.querySelectorAll('td')).map(td => td.innerText).join('\t')).join('\n');
+        let area = document.createElement('textarea'); area.value = text; document.body.appendChild(area);
+        area.select(); document.execCommand('copy'); document.body.removeChild(area);
+        alert("মানবিক বিভাগের তথ্য কপি হয়েছে!");
+    }
+
+    // আপনার দেওয়া সেই নির্দিষ্ট সতর্কতা মেসেজ
+    function confirmAndSend() {
+        const scriptURL = localStorage.getItem('active_sheet_url');
+        const sheetTabName = localStorage.getItem('active_tab_name');
+        
+        if (!scriptURL || !sheetTabName) {
+            alert("সতর্কতা: সঠিক শিট বা ট্যাব খুঁজে পাওয়া যায়নি। অনুগ্রহ করে কন্ট্রোল প্যানেল থেকে পুনরায় নির্বাচন করুন।");
+            return;
+        }
+
+        const rows = document.querySelectorAll('#tableBody tr');
+        if (rows.length === 0) return alert("টেবিলে কোনো ডাটা নেই!");
+
+        // আপনার দেওয়া মেসেজ হুবহু রাখা হয়েছে
+        const confirmMsg = `সতর্কতা: শিটে (${sheetTabName}) থাকা পূর্বের সকল ডাটা মুছে যাবে!\n\nআপনি কি নিশ্চিতভাবে আপলোড করতে চান?`;
+        
+        if (confirm(confirmMsg)) {
+            sendToGoogleSheet(scriptURL, sheetTabName, rows);
+        }
+    }
+
+    async function sendToGoogleSheet(url, tab, rows) {
+        const btn = document.getElementById('sheetBtn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> পাঠানো হচ্ছে...";
+        btn.disabled = true;
+
+        let allData = [];
+        rows.forEach(tr => allData.push(Array.from(tr.querySelectorAll('td')).map(td => td.innerText)));
+
+        try {
+            await fetch(url, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ sheetName: tab, data: allData }) });
+            alert("সফলভাবে মানবিক বিভাগের ডাটা " + tab + " ট্যাবে আপলোড করা হয়েছে!");
+        } catch (error) {
+            alert("ত্রুটি! ডাটা পাঠানো সম্ভব হয়নি। ইন্টারনেট সংযোগ পরীক্ষা করুন।");
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>

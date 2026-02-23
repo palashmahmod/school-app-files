@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>অন্যান্য তথ্য এন্ট্রি - CA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { 
+            --bg-gradient: linear-gradient(135deg, #4b6681 0%, #31475e 100%);
+            --white: #ffffff;
+            --primary-blue: #1a73e8;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --text-dark: #2c3e50;
+            --input-bg: #f8f9fa;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            background: var(--bg-gradient); 
+            background-attachment: fixed;
+            margin: 0; 
+            padding: 20px 15px; 
+            color: var(--text-dark);
+        }
+
+        .container { 
+            max-width: 500px; 
+            margin: 0 auto; 
+            background: var(--white); 
+            padding: 25px; 
+            border-radius: 24px; 
+            box-shadow: 10px 10px 25px rgba(0,0,0,0.4); /* ৩ডি শ্যাডো */
+        }
+
+        .header { 
+            text-align: center; 
+            margin-bottom: 25px; 
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+        }
+        .header h2 { font-size: 20px; color: var(--primary-blue); margin: 0; font-weight: 800; }
+
+        /* ইনপুট স্টাইল */
+        .entry-group { display: flex; flex-direction: column; gap: 15px; }
+        .input-box { display: flex; flex-direction: column; gap: 6px; }
+        
+        label { font-size: 13px; font-weight: 700; color: #555; margin-left: 5px; }
+        
+        input { 
+            padding: 12px 15px; 
+            border: 1.5px solid #dde1e5; 
+            border-radius: 12px; 
+            font-size: 15px; 
+            outline: none; 
+            background: var(--input-bg);
+            transition: 0.3s;
+        }
+        input:focus { border-color: var(--primary-blue); background: #fff; box-shadow: 0 0 8px rgba(26, 115, 232, 0.1); }
+
+        /* ডাইনামিক সেকশন */
+        .dynamic-section { margin-top: 20px; border-top: 1px dashed #ccc; padding-top: 20px; }
+        .extra-field { display: flex; gap: 10px; margin-bottom: 15px; align-items: flex-end; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .btn-remove { 
+            background: #fff; color: var(--danger); border: 1.5px solid var(--danger); 
+            width: 45px; height: 45px; border-radius: 12px; cursor: pointer; transition: 0.2s;
+        }
+        .btn-remove:hover { background: var(--danger); color: #fff; }
+
+        /* নতুন বক্স তৈরির এরিয়া */
+        .create-area { 
+            background: #f0f4f8; padding: 15px; border-radius: 15px; 
+            margin-top: 20px; display: flex; flex-direction: column; gap: 10px; 
+            border: 1px solid #d1d9e6;
+        }
+
+        /* বাটন ডিজাইন */
+        .btn-action { 
+            width: 100%; padding: 14px; border: none; border-radius: 12px; 
+            font-size: 16px; font-weight: bold; cursor: pointer; color: #fff; 
+            display: flex; align-items: center; justify-content: center; 
+            gap: 10px; margin-top: 15px; transition: 0.2s;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+        }
+        .btn-action:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .btn-save { background: var(--success); box-shadow: 4px 4px 0px #1e8449; }
+        .btn-back { background: var(--text-dark); box-shadow: 4px 4px 0px #111; text-decoration: none; }
+
+        .footer-text { text-align: center; font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 30px; letter-spacing: 1px; }
+
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="header">
+        <h2><i class="fas fa-edit"></i> অন্যান্য তথ্য এন্ট্রি (CA)</h2>
+    </div>
+
+    <div id="fixedFields" class="entry-group">
+        <div class="input-box"><label>পরীক্ষার ধরণ ও সাল</label><input type="text" id="val_1" placeholder="উদা: বার্ষিক পরীক্ষা ২০২৪"></div>
+        <div class="input-box"><label>শ্রেণি</label><input type="text" id="val_2" placeholder="উদা: ১০ম"></div>
+        <div class="input-box"><label>শাখা/ বিভাগ</label><input type="text" id="val_3" placeholder="উদা: বিজ্ঞান"></div>
+        <div class="input-box"><label>মোট শিক্ষার্থী সংখ্যা</label><input type="text" id="val_4"></div>
+        <div class="input-box"><label>অংশগ্রহণকারী শিক্ষার্থী</label><input type="text" id="val_5"></div>
+        <div class="input-box"><label>কৃতকার্য শিক্ষার্থী</label><input type="text" id="val_6"></div>
+        <div class="input-box"><label>অকৃতকার্য শিক্ষার্থী</label><input type="text" id="val_7"></div>
+        <div class="input-box"><label>অনুপস্থিত শিক্ষার্থী</label><input type="text" id="val_8"></div>
+        <div class="input-box"><label>পাশের হার</label><input type="text" id="val_9"></div>
+    </div>
+
+    <div id="dynamicContainer" class="dynamic-section"></div>
+
+    <div class="create-area">
+        <label><i class="fas fa-plus-circle"></i> নতুন বক্স তৈরি করুন</label>
+        <div style="display: flex; gap: 8px;">
+            <input type="text" id="newFieldName" placeholder="বক্সের নাম লিখুন" style="flex:1">
+            <button onclick="createField()" style="background: var(--primary-blue); color: white; border: none; padding: 0 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">তৈরি</button>
+        </div>
+    </div>
+
+    <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
+
+    <button class="btn-action btn-save" onclick="saveCAData()">
+        <i class="fas fa-save"></i> সকল তথ্য সংরক্ষণ করুন
+    </button>
+
+    <a href="index.html" class="btn-action btn-back">
+        <i class="fas fa-arrow-left"></i> ফিরে যান
+    </a>
+</div>
+
+<div class="footer-text">POWERED BY PALASH MAHMOD</div>
+
+<script>
+    const KEY = "school_v3_data";
+    let db = JSON.parse(localStorage.getItem(KEY)) || { other: {} };
+
+    window.onload = function() {
+        for(let i=1; i<=9; i++) {
+            if(db.other && db.other[i]) document.getElementById(`val_${i}`).value = db.other[i];
+        }
+        if(db.other && db.other.extra) {
+            db.other.extra.forEach((item) => createField(item.name, item.value, true));
+        }
+    };
+
+    function createField(name = "", value = "", isLoad = false) {
+        const fieldName = isLoad ? name : document.getElementById('newFieldName').value;
+        if(!fieldName) return;
+
+        const container = document.getElementById('dynamicContainer');
+        const div = document.createElement('div');
+        div.className = 'extra-field';
+        div.innerHTML = `
+            <div class="input-box" style="flex:1">
+                <label>${fieldName}</label>
+                <input type="text" class="dyn-input" data-label="${fieldName}" value="${value}">
+            </div>
+            <button class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+        `;
+        container.appendChild(div);
+        document.getElementById('newFieldName').value = "";
+    }
+
+    function saveCAData() {
+        if(!db.other) db.other = {};
+        for(let i=1; i<=9; i++) {
+            db.other[i] = document.getElementById(`val_${i}`).value;
+        }
+        let extraArr = [];
+        document.querySelectorAll('.dyn-input').forEach((el, index) => {
+            let id = index + 10;
+            db.other[id] = el.value;
+            extraArr.push({ name: el.getAttribute('data-label'), value: el.value });
+        });
+        db.other.extra = extraArr;
+        localStorage.setItem(KEY, JSON.stringify(db));
+        alert("সফলভাবে তথ্য সংরক্ষিত হয়েছে!");
+    }
+</script>
+</body>
+</html>

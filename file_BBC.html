@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ফলাফল বিবরণী - BBC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { 
+            --bg-gradient: linear-gradient(135deg, #4b6681 0%, #31475e 100%);
+            --white: #ffffff;
+            --primary: #1a73e8; 
+            --border: #000; 
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background: var(--bg-gradient); 
+            background-attachment: fixed;
+            margin: 0; 
+            padding: 15px; 
+        }
+
+        .header-area { text-align: center; margin-bottom: 20px; color: var(--white); }
+        .header-area h2 { margin: 0; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); font-weight: 800; }
+
+        /* টেবিলের বাইরের ডিজাইন (Card Style) */
+        .table-wrapper { 
+            background: #fff; 
+            border: 2px solid var(--border); 
+            border-radius: 12px;
+            overflow-x: auto; 
+            height: 75vh; 
+            position: relative;
+            box-shadow: 10px 10px 25px rgba(0,0,0,0.4);
+        }
+
+        /* টেবিলের ভেতরের ডিজাইন - আপনার আগের মতোই রাখা হয়েছে */
+        table { border-collapse: collapse; width: max-content; }
+        th, td { border: 1px solid var(--border); padding: 4px 8px; text-align: center; font-size: 13px; white-space: nowrap; }
+        
+        th { background: #e0e0e0; position: sticky; top: 0; z-index: 20; }
+        
+        /* শুধুমাত্র প্রথম কলাম (রোল) ফ্রিজ রাখা হয়েছে আপনার আগের কোড অনুযায়ী */
+        th:nth-child(1), td:nth-child(1) { position: sticky; left: 0; background: #f1f1f1; z-index: 10; }
+        th:nth-child(1) { z-index: 30; }
+
+        /* বাটন এরিয়া */
+        .btn-container { max-width: 500px; margin: 20px auto; display: flex; flex-direction: column; gap: 10px; }
+        
+        .btn { 
+            padding: 14px; border: none; border-radius: 12px; font-weight: bold; 
+            cursor: pointer; text-decoration: none; text-align: center; color: #fff; 
+            font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 5px 0px rgba(0,0,0,0.2); transition: 0.1s;
+        }
+
+        .btn:active { transform: translateY(3px); box-shadow: none; }
+
+        .btn-sheet { background: #0F9D58; box-shadow: 0 5px 0px #0b7a44; } 
+        .btn-copy { background: #28a745; box-shadow: 0 5px 0px #1e8449; }
+        .btn-back { background: #000; box-shadow: 0 5px 0px #333; }
+        .btn-home { background: #6c757d; box-shadow: 0 5px 0px #5a6268; }
+
+        .f-count { color: red; font-weight: bold; }
+    </style>
+</head>
+<body onload="initBBC()">
+
+<div class="header-area">
+    <h2><i class="fas fa-file-invoice"></i> ফলাফল বিবরণী (BBC)</h2>
+</div>
+
+<div class="table-wrapper">
+    <table id="resultTable">
+        <thead><tr id="tableHead"></tr></thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
+
+<div class="btn-container">
+    <button id="sheetBtn" class="btn btn-sheet" onclick="confirmAndSend()">
+        <i class="fas fa-file-excel"></i> গুগল শিটে ডাটা পাঠান
+    </button>
+    
+    <button class="btn btn-copy" onclick="copyData()">
+        <i class="fas fa-copy"></i> তথ্য কপি করুন (হেডার বাদে)
+    </button>
+    
+    <a href="file_BB.html" class="btn btn-back">
+        <i class="fas fa-cog"></i> লজিক পরিবর্তন করুন (BBA)
+    </a>
+    
+    <a href="index.html" class="btn btn-home">হোম মেনু</a>
+</div>
+
+<script>
+    const colNames = ["রোল", "নাম", "বাঃ ১ CQ", "বাঃ ১ MCQ", "বাঃ ১ মোট", "বাঃ ২ CQ", "বাঃ ২ MCQ", "বাঃ ২ মোট", "বাংলা গ্রেড", "ইং ১", "ইং ২", "ইং গ্রেড", "ধর্ম CQ", "ধর্ম MCQ", "ধর্ম মোট", "ধর্ম গ্রেড", "গণিত CQ", "গণিত MCQ", "গণিত মোট", "গণিত গ্রেড", "বিজ্ঞান CQ", "বিজ্ঞান MCQ", "বিজ্ঞান মোট", "বিজ্ঞান গ্রেড", "বাঃবিঃ CQ", "বাঃবিঃ MCQ", "বাঃবিঃ মোট", "বাঃবিঃ গ্রেড", "তথ্য CQ", "তথ্য PRAC", "তথ্য মোট", "তথ্য গ্রেড", "মোট নম্বর", "GPA", "মেধাস্থান", "মেধানুসারে রোল", "উপবৃত্তি", "রেজি নং", "জন্মতারিখ", "ফাঁকা", "অন্যান্য"];
+
+    function toB(n) { return n.toString().split('').map(x => ['০','১','২','৩','৪','৫','৬','৭','৮','৯'][x] || x).join(''); }
+    function fmtR(n) { return `'${toB(n.toString().padStart(2, '0'))}`; }
+
+    function calcGrade(marks, full) {
+        let m = marks;
+        if (full === 150) m = marks / 1.5;
+        if (full === 50) m = marks * 2;
+        if (m >= 80) return {g:"A+", p:5.00}; if (m >= 70) return {g:"A", p:4.00};
+        if (m >= 60) return {g:"A-", p:3.50}; if (m >= 50) return {g:"B", p:3.00};
+        if (m >= 40) return {g:"C", p:2.00}; if (m >= 33) return {g:"D", p:1.00};
+        return {g:"F", p:0.00};
+    }
+
+    function processResult(d, opt) {
+        let isFail = false;
+        if (opt === "1") { if((d.b1t + d.b2t) < 50) isFail = true; }
+        else if (opt === "2") { if(d.b1t < 33 || d.b2t < 17) isFail = true; }
+        else if (opt === "3" || opt === "5") { if(d.b1cq < 23 || d.b1mcq < 10 || d.b2cq < 12 || d.b2mcq < 5) isFail = true; }
+        else if (opt === "4" || opt === "6") { if(d.b1cq < 23 || d.b1mcq < 10 || d.b2t < 17) isFail = true; }
+        
+        if (opt === "1") { if((d.e1 + d.e2) < 50) isFail = true; }
+        else { if(d.e1 < 33 || d.e2 < 17) isFail = true; }
+
+        if (d.type === 'gen') {
+            if (opt === "1" || opt === "2") { if(d.total < 33) isFail = true; }
+            else { if(d.cq < 23 || d.mcq < 10) isFail = true; }
+        }
+
+        if (d.type === 'ict') {
+            if (opt === "1" || opt === "2" || opt === "5" || opt === "6") { if(d.total < 17) isFail = true; }
+            else { if(d.cq < 8 || d.prac < 8) isFail = true; }
+        }
+
+        let res = calcGrade(d.total, d.full);
+        if (isFail) { res.g = "F"; res.p = 0; }
+        return res;
+    }
+
+    function initBBC() {
+        const db = JSON.parse(localStorage.getItem('school_v3_data')) || { s: {}, other: {} };
+        const logs = JSON.parse(localStorage.getItem('bba_master_settings')) || {master_logic: "1", gpa_logic: "1"};
+        const students = db.s || {};
+
+        document.getElementById('tableHead').innerHTML = colNames.map((n, i) => `<th>${i+1}৷ ${n}</th>`).join('');
+
+        let lastNamedRoll = 0;
+        Object.keys(students).forEach(r => {
+            let rollInt = parseInt(r);
+            if(!isNaN(rollInt) && students[r] && students[r].trim() !== "" && rollInt > lastNamedRoll) {
+                lastNamedRoll = rollInt;
+            }
+        });
+
+        let resultData = [];
+        for(let r=1; r<=lastNamedRoll; r++) {
+            let row = new Array(42).fill("");
+            const getM = (s, t) => parseFloat(db[s]?.[r]?.[t] || 0);
+
+            row[1] = fmtR(r);
+            row[2] = students[r] || "";
+
+            let b1cq = getM('j_b1','cq'), b1mcq = getM('j_b1','mcq'), b2cq = getM('j_b2','cq'), b2mcq = getM('j_b2','mcq');
+            row[3]=b1cq||""; row[4]=b1mcq||""; row[5]=b1cq+b1mcq; row[6]=b2cq||""; row[7]=b2mcq||""; row[8]=b2cq+b2mcq;
+
+            let bRes = processResult({b1cq, b1mcq, b1t:row[5], b2cq, b2mcq, b2t:row[8], total:row[5]+row[8], full:150}, logs.master_logic);
+            row[9] = bRes.g;
+
+            row[10]=getM('j_e1','total'); row[11]=getM('j_e2','total');
+            let eRes = processResult({e1:row[10], e2:row[11], total:row[10]+row[11], full:150}, logs.master_logic);
+            row[12] = eRes.g;
+
+            let subKeys = [{k:'j_rel', c:13}, {k:'j_math', c:17}, {k:'j_sci', c:21}, {k:'j_bss', c:25}];
+            let genPoints = [];
+            subKeys.forEach(s => {
+                let cq = getM(s.k, 'cq'), mcq = getM(s.k, 'mcq');
+                row[s.c]=cq||""; row[s.c+1]=mcq||""; row[s.c+2]=cq+mcq;
+                let res = processResult({type:'gen', cq, mcq, total:row[s.c+2], full:100}, logs.master_logic);
+                row[s.c+3] = res.g; genPoints.push(res);
+            });
+
+            let icq = getM('j_ict','cq'), iprac = getM('j_ict','prac');
+            row[29]=icq||""; row[30]=iprac||""; row[31]=icq+iprac;
+            let iRes = processResult({type:'ict', cq:icq, prac:iprac, total:row[31], full:50}, logs.master_logic);
+            row[32] = iRes.g;
+
+            row[33] = row[5]+row[8]+row[10]+row[11]+row[15]+row[19]+row[23]+row[27]+row[31];
+
+            let gList = [bRes, eRes, ...genPoints, iRes];
+            let fCount = gList.filter(x => x.g === "F").length;
+            let totalP = gList.reduce((s, x) => s + x.p, 0);
+
+            if(fCount > 0) row[34] = `F${fCount}`;
+            else row[34] = (logs.gpa_logic === "2") ? "" : (totalP/7).toFixed(2);
+
+            row[37] = db.stipend?.[r] || ""; 
+            row[38] = db.reg?.[r] || ""; 
+            row[39] = db.dob?.[r] || "";
+            row[40] = ""; 
+            row[41] = (db.other && db.other[r]) ? db.other[r] : "";
+
+            resultData.push({ r, data: row, fCount, avgP: totalP/7, total: row[33] });
+        }
+
+        let meritSort = [...resultData].sort((a,b) => {
+            if(a.fCount !== b.fCount) return a.fCount - b.fCount;
+            if(a.avgP !== b.avgP) return b.avgP - a.avgP;
+            if(a.total !== b.total) return b.total - a.total;
+            return a.r - b.r;
+        });
+
+        meritSort.forEach((item, idx) => {
+            let m = idx + 1;
+            let obj = resultData.find(x => x.r === item.r);
+            obj.data[35] = m <= 10 ? ["১ম","২য়","৩য়","৪র্থ","৫ম","৬ষ্ঠ","৭ম","৮ম","৯ম","১০ম"][m-1] : toB(m)+"তম";
+            obj.data[36] = fmtR(m);
+        });
+
+        document.getElementById('tableBody').innerHTML = resultData.map(item => `
+            <tr>${item.data.slice(1).map(cell => `<td class="${cell && cell.toString().includes('F')?'f-count':''}">${cell}</td>`).join('')}</tr>
+        `).join('');
+    }
+
+    function copyData() {
+        let text = Array.from(document.querySelectorAll('#tableBody tr')).map(tr => 
+            Array.from(tr.querySelectorAll('td')).map(td => td.innerText).join('\t')).join('\n');
+        let area = document.createElement('textarea'); area.value = text; document.body.appendChild(area);
+        area.select(); document.execCommand('copy'); document.body.removeChild(area);
+        alert("কপি সম্পন্ন হয়েছে!");
+    }
+
+    function confirmAndSend() {
+        const scriptURL = localStorage.getItem('active_sheet_url');
+        const sheetTabName = localStorage.getItem('active_tab_name');
+        if (!scriptURL || !sheetTabName) {
+            alert("ভুল! আগে CE ফাইলে গিয়ে শ্রেণি ও শাখা নির্ধারণ করুন।");
+            return;
+        }
+        const rows = document.querySelectorAll('#tableBody tr');
+        if (rows.length === 0) return alert("টেবিলে কোনো ডাটা নেই!");
+
+        if (confirm(`সতর্কতা: শিটে (${sheetTabName}) থাকা পূর্বের ডাটা মুছে যাবে! আপলোড করবেন?`)) {
+            sendToGoogleSheet(scriptURL, sheetTabName, rows);
+        }
+    }
+
+    async function sendToGoogleSheet(url, tab, rows) {
+        const btn = document.getElementById('sheetBtn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> পাঠানো হচ্ছে...";
+        btn.disabled = true;
+
+        let allData = [];
+        rows.forEach(tr => {
+            const cells = Array.from(tr.querySelectorAll('td')).map(td => td.innerText);
+            allData.push(cells);
+        });
+
+        try {
+            await fetch(url, {
+                method: 'POST',
+                body: JSON.stringify({ sheetName: tab, data: allData })
+            });
+            alert("সফলভাবে ডাটা পাঠানো হয়েছে!");
+        } catch (error) {
+            alert("ইন্টারনেট কানেকশন চেক করুন।");
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>

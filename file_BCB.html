@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ব্যবসায় বিভাগ - BCB</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { 
+            --bg-gradient: linear-gradient(135deg, #4b6681 0%, #31475e 100%);
+            --white: #ffffff;
+            --accent-green: #28a745; 
+            --dark: #2c3e50;
+        }
+
+        * { box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background: var(--bg-gradient); 
+            background-attachment: fixed;
+            margin: 0; 
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container { 
+            width: 90%; 
+            max-width: 450px; 
+            padding: 30px 20px; 
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .header { text-align: center; margin-bottom: 35px; color: var(--white); }
+        .header h1 { 
+            font-size: 22px; 
+            margin: 0; 
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            font-weight: 800;
+        }
+        .header p { font-size: 14px; opacity: 0.8; margin-top: 5px; }
+
+        .grid-container { display: grid; grid-template-columns: 1fr; gap: 18px; }
+
+        .menu-card { 
+            display: flex; 
+            padding: 20px; 
+            background: var(--white); 
+            border-radius: 15px; 
+            align-items: center; 
+            gap: 15px; 
+            color: var(--dark); 
+            text-decoration: none; 
+            font-weight: bold; 
+            transition: 0.2s; 
+            box-shadow: 0 6px 0px #cfd8dc;
+            border: 1px solid #eee;
+        }
+
+        .menu-card:hover { transform: translateY(-2px); }
+        .menu-card:active { transform: translateY(4px); box-shadow: none; background: #f0f0f0; }
+
+        .menu-card i { 
+            font-size: 24px; 
+            color: var(--accent-green); 
+            width: 40px; 
+            height: 40px;
+            background: #e8f5e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+
+        .menu-card span { font-size: 16px; }
+
+        .back-link { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px;
+            margin-top: 35px; 
+            text-decoration: none; 
+            color: var(--white); 
+            font-weight: bold; 
+            font-size: 14px;
+            opacity: 0.9;
+            transition: 0.3s;
+        }
+        .back-link:hover { opacity: 1; text-decoration: underline; }
+
+        .footer-text { 
+            text-align: center; 
+            font-size: 10px; 
+            margin-top: 25px; 
+            color: rgba(255,255,255,0.5); 
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-briefcase"></i> ব্যবসায় বিভাগ</h1>
+            <p>৯ম-১০ম শ্রেণি (BCB)</p>
+        </div>
+
+        <div class="grid-container">
+            <a href="file_BCBA.html" class="menu-card">
+                <i class="fas fa-sliders"></i>
+                <span>১. লজিক নির্ধারণ (BCBA)</span>
+            </a>
+
+            <a href="file_BCBB.html" class="menu-card">
+                <i class="fas fa-edit"></i>
+                <span>২. বিষয়ে নম্বর এন্ট্রি (BCBB)</span>
+            </a>
+
+            <a href="file_BCBC.html" class="menu-card">
+                <i class="fas fa-table-list"></i>
+                <span>৩. ফলাফল বিবরণী (BCBC)</span>
+            </a>
+        </div>
+
+        <a href="file_B.html" class="back-link"><i class="fas fa-chevron-left"></i> আগের পেইজে ফিরে যান</a>
+        
+        <div class="footer-text">POWERED BY PALASH MAHMOD</div>
+    </div>
+
+</body>
+</html>

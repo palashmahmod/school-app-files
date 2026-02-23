@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বিজ্ঞান নম্বর এন্ট্রি - BCAB</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { 
+            --bg-gradient: linear-gradient(135deg, #4b6681 0%, #31475e 100%);
+            --white: #ffffff;
+            --accent: #1a73e8; 
+            --success: #28a745; 
+            --danger: #d93025;
+            --pass-bg: #e8f5e9; 
+            --fail-bg: #ffebee;
+            --no-name-bg: #eceff1;
+        }
+
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background: var(--bg-gradient); 
+            background-attachment: fixed;
+            margin: 0; padding: 0; 
+            min-height: 100vh;
+        }
+
+        /* স্টিকি নেভিগেশন */
+        .entry-nav { 
+            position: sticky; top: 0; background: var(--white); 
+            padding: 12px; display: none; justify-content: space-around; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 1000;
+        }
+
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+
+        .header-title { text-align: center; color: var(--white); margin-bottom: 20px; }
+        .header-title h2 { margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+
+        /* সাবজেক্ট লিস্ট ডিজাইন */
+        .subject-list { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .subject-btn { 
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 25px; background: var(--white); 
+            border-radius: 15px; font-weight: bold; cursor: pointer; 
+            transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            color: #333; border-left: 6px solid var(--accent);
+        }
+        .subject-btn:hover { transform: translateX(10px); background: #f0f7ff; }
+
+        /* এন্ট্রি সেকশন */
+        #entrySection { display: none; margin-top: 10px; }
+        .entry-card { 
+            background: var(--white); border-radius: 15px; 
+            padding: 15px; overflow-x: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f8f9fa; padding: 12px 8px; font-size: 13px; border: 1px solid #dee2e6; color: #555; }
+        td { border: 1px solid #eee; padding: 8px; text-align: center; }
+
+        input[type="number"] { 
+            width: 50px; padding: 8px 4px; border: 2px solid #ddd; 
+            border-radius: 6px; text-align: center; font-weight: bold; outline: none;
+        }
+
+        /* কালার কোডিং */
+        .box-pass { background-color: var(--pass-bg) !important; border-color: var(--success) !important; color: #2e7d32; }
+        .box-fail { background-color: var(--fail-bg) !important; border-color: var(--danger) !important; color: var(--danger); }
+        .box-no-name { background-color: var(--no-name-bg) !important; color: #999 !important; border-color: #ddd !important; cursor: not-allowed; }
+
+        .total-box { font-weight: 800; color: var(--accent); font-size: 15px; }
+
+        /* বাটন স্টাইল */
+        .btn { 
+            padding: 10px 20px; border: none; border-radius: 8px; 
+            color: white; font-weight: bold; cursor: pointer; 
+            display: flex; align-items: center; gap: 8px; transition: 0.2s;
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn-save { background: var(--success); }
+        .btn-clear { background: var(--danger); }
+        .btn-back { background: #333; }
+        .btn-home { background: #546e7a; margin-top: 15px; width: 100%; justify-content: center; text-decoration: none; }
+
+        .footer-text { text-align: center; font-size: 11px; color: #ccc; margin: 30px 0; letter-spacing: 1px; }
+
+    </style>
+</head>
+
+<body onload="init()">
+
+<div class="container" id="listSection">
+    <div class="header-title"><h2><i class="fas fa-microscope"></i> বিজ্ঞান নম্বর এন্ট্রি (BCAB)</h2></div>
+    <div class="subject-list" id="subButtons"></div>
+
+    <div style="margin-top:25px;">
+        <button class="btn btn-clear" style="width: 100%; justify-content: center;" onclick="clearAllSystem()">
+            <i class="fas fa-trash-alt"></i> সকল তথ্য মুছে ফেলুন
+        </button>
+        <a href="file_BCA.html" class="btn btn-back" style="margin-top: 12px; width: 100%; justify-content: center; text-decoration: none;">
+            <i class="fas fa-arrow-left"></i> আগের পেইজে ফিরে যান
+        </a>
+        <a href="index.html" class="btn btn-home"><i class="fas fa-home"></i> হোম পেইজ</a>
+    </div>
+</div>
+
+<div class="entry-nav" id="topNav">
+    <button class="btn btn-save" onclick="saveSubjectData()"><i class="fas fa-save"></i> সংরক্ষণ</button>
+    <button class="btn btn-clear" onclick="clearThisSubject()"><i class="fas fa-eraser"></i> মুছুন</button>
+    <button class="btn btn-back" onclick="hideEntry()"><i class="fas fa-times"></i> বন্ধ করুন</button>
+</div>
+
+<div class="container" id="entrySection">
+    <div class="header-title"><h3 id="subjectTitle" style="color:white; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px;">বিষয় নাম</h3></div>
+    <div class="entry-card">
+        <table>
+            <thead><tr id="tableHeader"></tr></thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+    <div style="height: 50px;"></div> </div>
+
+<div class="footer-text">POWERED BY PALASH MAHMOD</div>
+
+<script>
+    const KEY = "school_v3_data";
+    let db = JSON.parse(localStorage.getItem(KEY)) || { s: {} };
+    let currentSubKey = ""; 
+
+    let subjects = [
+        { name: "বাংলা ১ম", key: "b1", parts: { cq: [70, 23], mcq: [30, 10] } },
+        { name: "বাংলা ২য়", key: "b2", parts: { cq: [70, 23], mcq: [30, 10] } },
+        { name: "ইংরেজি ১ম", key: "e1", parts: { total: [100, 33] } },
+        { name: "ইংরেজি ২য়", key: "e2", parts: { total: [100, 33] } },
+        { name: "গণিত", key: "math", parts: { cq: [70, 23], mcq: [30, 10] } },
+        { name: "ধর্ম", key: "rel", parts: { cq: [70, 23], mcq: [30, 10] } },
+        { name: "বাঃ ও বিঃ", key: "bss", parts: { cq: [70, 23], mcq: [30, 10] } },
+        { name: "পদার্থ", key: "phy", parts: { cq: [50, 17], mcq: [25, 8], prac: [25, 8] } },
+        { name: "রসায়ন", key: "chem", parts: { cq: [50, 17], mcq: [25, 8], prac: [25, 8] } },
+        { name: "জীববিজ্ঞান", key: "bio", parts: { cq: [50, 17], mcq: [25, 8], prac: [25, 8] } },
+        { name: "গার্হস্থ্য/উঃগণিত", key: "hm", parts: { cq: [50, 17], mcq: [25, 8], prac: [25, 8] } },
+        { name: "তথ্য প্রযুক্তি", key: "ict", parts: { mcq: [25, 8], prac: [25, 8] } }
+    ];
+
+    function init() {
+        let html = "";
+        subjects.forEach((s, index) => {
+            html += `<div class="subject-btn" onclick="showEntry(${index})"><span>${s.name}</span><i class="fas fa-chevron-right"></i></div>`;
+        });
+        document.getElementById('subButtons').innerHTML = html;
+    }
+
+    function showEntry(index) {
+        let s = subjects[index];
+        currentSubKey = s.key;
+        document.getElementById('subjectTitle').innerText = s.name;
+        document.getElementById('listSection').style.display = "none";
+        document.getElementById('entrySection').style.display = "block";
+        document.getElementById('topNav').style.display = "flex";
+        window.scrollTo(0,0);
+        renderTable(s);
+    }
+
+    function hideEntry() {
+        document.getElementById('listSection').style.display = "block";
+        document.getElementById('entrySection').style.display = "none";
+        document.getElementById('topNav').style.display = "none";
+    }
+
+    function renderTable(s) {
+        let header = `<th>রোল</th>`;
+        if(s.parts.cq) header += `<th>CQ</th>`;
+        if(s.parts.mcq) header += `<th>MCQ</th>`;
+        if(s.parts.prac) header += `<th>PR</th>`;
+        if(s.parts.total) header += `<th>নম্বর</th>`;
+        header += `<th>মোট</th>`;
+        document.getElementById('tableHeader').innerHTML = header;
+
+        let body = "";
+        if(!db[currentSubKey]) db[currentSubKey] = {};
+        
+        let lastRoll = 0;
+        for(let r=150; r>=1; r--) {
+            if(db.s && db.s[r] && db.s[r].trim() !== "") { lastRoll = r; break; }
+        }
+        if(lastRoll === 0) lastRoll = 10;
+
+        for(let i=1; i<=lastRoll; i++) {
+            let hasName = (db.s && db.s[i] && db.s[i].trim() !== "");
+            let d = db[currentSubKey][i] || {cq:"", mcq:"", prac:"", total:""};
+            let rowClass = hasName ? "" : "box-no-name";
+            let readOnly = hasName ? "" : "readonly";
+
+            body += `<tr class="${rowClass}"><td>${toB(i)}</td>`;
+            if(s.parts.cq) body += `<td><input type="number" id="cq_${i}" value="${hasName?d.cq:0}" ${readOnly} oninput="calc(${i})" class="${hasName?checkColor(d.cq, s.parts.cq):'box-no-name'}"></td>`;
+            if(s.parts.mcq) body += `<td><input type="number" id="mcq_${i}" value="${hasName?d.mcq:0}" ${readOnly} oninput="calc(${i})" class="${hasName?checkColor(d.mcq, s.parts.mcq):'box-no-name'}"></td>`;
+            if(s.parts.prac) body += `<td><input type="number" id="prac_${i}" value="${hasName?d.prac:0}" ${readOnly} oninput="calc(${i})" class="${hasName?checkColor(d.prac, s.parts.prac):'box-no-name'}"></td>`;
+            if(s.parts.total) body += `<td><input type="number" id="total_${i}" value="${hasName?d.total:0}" ${readOnly} oninput="calc(${i})" class="${hasName?checkColor(d.total, s.parts.total):'box-no-name'}"></td>`;
+            body += `<td><span class="total-box" id="sum_${i}">${hasName?calculateTotal(d):'০'}</span></td></tr>`;
+        }
+        document.getElementById('tableBody').innerHTML = body;
+    }
+
+    function checkColor(val, rule) {
+        if(val === "" || val === undefined) return "";
+        let num = parseFloat(val);
+        if(num > rule[0] || num < rule[1]) return "box-fail";
+        return "box-pass";
+    }
+
+    function calc(i) {
+        let sub = subjects.find(x => x.key === currentSubKey);
+        let rowData = {
+            cq: document.getElementById(`cq_${i}`) ? document.getElementById(`cq_${i}`).value : "",
+            mcq: document.getElementById(`mcq_${i}`) ? document.getElementById(`mcq_${i}`).value : "",
+            prac: document.getElementById(`prac_${i}`) ? document.getElementById(`prac_${i}`).value : "",
+            total: document.getElementById(`total_${i}`) ? document.getElementById(`total_${i}`).value : ""
+        };
+        if(sub.parts.cq) updateInputColor(`cq_${i}`, rowData.cq, sub.parts.cq);
+        if(sub.parts.mcq) updateInputColor(`mcq_${i}`, rowData.mcq, sub.parts.mcq);
+        if(sub.parts.prac) updateInputColor(`prac_${i}`, rowData.prac, sub.parts.prac);
+        if(sub.parts.total) updateInputColor(`total_${i}`, rowData.total, sub.parts.total);
+        document.getElementById(`sum_${i}`).innerText = calculateTotal(rowData);
+    }
+
+    function updateInputColor(id, val, rule) {
+        let el = document.getElementById(id);
+        if(!el.readOnly) el.className = checkColor(val, rule);
+    }
+
+    function calculateTotal(d) {
+        let sum = (parseFloat(d.cq)||0) + (parseFloat(d.mcq)||0) + (parseFloat(d.prac)||0) + (parseFloat(d.total)||0);
+        return sum > 0 ? sum : "";
+    }
+
+    function saveSubjectData() {
+        for(let i=1; i<=150; i++) {
+            let hasName = (db.s && db.s[i] && db.s[i].trim() !== "");
+            if(hasName) {
+                db[currentSubKey][i] = {
+                    cq: document.getElementById(`cq_${i}`) ? document.getElementById(`cq_${i}`).value : "",
+                    mcq: document.getElementById(`mcq_${i}`) ? document.getElementById(`mcq_${i}`).value : "",
+                    prac: document.getElementById(`prac_${i}`) ? document.getElementById(`prac_${i}`).value : "",
+                    total: document.getElementById(`total_${i}`) ? document.getElementById(`total_${i}`).value : ""
+                };
+            }
+        }
+        localStorage.setItem(KEY, JSON.stringify(db));
+        alert("বিজ্ঞান বিভাগের " + document.getElementById('subjectTitle').innerText + " এর তথ্য সংরক্ষিত হয়েছে!");
+    }
+
+    function clearThisSubject() {
+        if(confirm("এই বিষয়ের সকল নম্বর মুছবেন?")) {
+            db[currentSubKey] = {};
+            localStorage.setItem(KEY, JSON.stringify(db));
+            renderTable(subjects.find(x => x.key === currentSubKey));
+        }
+    }
+
+    function clearAllSystem() {
+        if(confirm("সতর্কতা: বিজ্ঞান বিভাগের সকল বিষয়ের নম্বর মুছে যাবে!")) {
+            subjects.forEach(s => db[s.key] = {});
+            localStorage.setItem(KEY, JSON.stringify(db));
+            alert("সব তথ্য মুছে ফেলা হয়েছে।");
+            if(document.getElementById('entrySection').style.display === "block") renderTable(subjects.find(x => x.key === currentSubKey));
+        }
+    }
+
+    function toB(n) { return n.toString().padStart(2, '0').split('').map(x => ['০','১','২','৩','৪','৫','৬','৭','৮','৯'][x]).join(''); }
+</script>
+</body>
+</html>

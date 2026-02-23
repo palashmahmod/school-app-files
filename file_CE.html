@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>শাখা ও বিভাগ নির্ধারণ - CE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { 
+            --bg-gradient: linear-gradient(135deg, #4b6681 0%, #31475e 100%);
+            --white: #ffffff;
+            --primary: #1a73e8; 
+            --dark: #202124;
+        }
+
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background: var(--bg-gradient); 
+            background-attachment: fixed;
+            margin: 0; padding: 20px; min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* অ্যাডমিন গেটওয়ে ডিজাইন */
+        #authOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-gradient);
+            z-index: 9999; display: flex; align-items: center; justify-content: center;
+        }
+
+        .auth-box { 
+            background: #fff; padding: 40px 30px; border-radius: 20px; 
+            box-shadow: 10px 15px 35px rgba(0,0,0,0.4); text-align: center; width: 90%; max-width: 350px; 
+        }
+
+        .auth-box i { color: var(--primary); margin-bottom: 15px; }
+
+        .auth-box input { 
+            width: 100%; padding: 15px; margin: 20px 0; border: 2px solid #eee; 
+            border-radius: 12px; text-align: center; font-size: 20px; outline: none; transition: 0.3s;
+            background: #f9f9f9;
+        }
+        .auth-box input:focus { border-color: var(--primary); background: #fff; }
+
+        /* মেইন কন্ট্রোল কার্ড */
+        .card { 
+            background: #fff; width: 100%; max-width: 400px; padding: 30px; 
+            border-radius: 20px; box-shadow: 10px 15px 35px rgba(0,0,0,0.4); 
+            display: none; border: 1px solid rgba(255,255,255,0.3);
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { text-align: center; color: var(--dark); font-size: 20px; margin-bottom: 25px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; }
+        
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; font-size: 14px; }
+        
+        select { 
+            width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #e0e0e0; 
+            font-size: 16px; margin-bottom: 20px; outline: none; transition: 0.3s; background: #f9f9f9;
+            cursor: pointer; -webkit-appearance: none;
+        }
+
+        select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 8px rgba(26, 115, 232, 0.2); }
+
+        .btn-save { 
+            width: 100%; padding: 16px; background: var(--primary); color: #fff; 
+            border: none; border-radius: 12px; font-weight: bold; cursor: pointer; 
+            font-size: 16px; transition: 0.2s; box-shadow: 0 5px 0px #0d47a1;
+        }
+
+        .btn-save:hover { transform: translateY(-2px); }
+        .btn-save:active { transform: translateY(3px); box-shadow: none; }
+
+        .back-link { display: block; text-align: center; margin-top: 20px; text-decoration: none; color: #666; font-size: 14px; font-weight: 500; }
+        .back-link:hover { color: var(--primary); }
+
+        .status-tag {
+            background: #e8f0fe; color: #1967d2; padding: 15px; border-radius: 12px;
+            font-size: 13px; margin-top: 20px; text-align: left; font-weight: 500;
+            border-left: 4px solid var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+<div id="authOverlay">
+    <div class="auth-box">
+        <i class="fas fa-user-lock fa-4x"></i>
+        <h3 style="margin:15px 0 5px; color:#333">অ্যাডমিন এক্সেস</h3>
+        <p style="color:#777; font-size:13px">কনফিগারেশন পরিবর্তন করতে পাসওয়ার্ড দিন</p>
+        <input type="password" id="passInput" placeholder="••••••••" autocomplete="off">
+        <button class="btn-save" onclick="checkPass()">প্রবেশ করুন</button>
+        <a href="file_C.html" style="display:block; margin-top:20px; color:#fff; text-decoration:none; font-size:14px">ফিরে যান</a>
+    </div>
+</div>
+
+<div class="card" id="mainCard">
+    <h2><i class="fas fa-sitemap" style="color:var(--primary)"></i> শাখা ও বিভাগ নির্ধারণ</h2>
+    
+    <label><i class="fas fa-graduation-cap"></i> ১. শ্রেণি নির্বাচন করুন</label>
+    <select id="classSelect" onchange="updateSubOptions()">
+        <option value="">বাছাই করুন...</option>
+        <option value="Class_6">৬ষ্ঠ শ্রেণি</option>
+        <option value="Class_7">৭ম শ্রেণি</option>
+        <option value="Class_8">৮ম শ্রেণি</option>
+        <option value="Class_9">৯ম শ্রেণি</option>
+        <option value="Class_10">১০ম শ্রেণি</option>
+        <option value="Class_SSC">SSC পরীক্ষার্থী</option>
+    </select>
+
+    <div id="subOptionBox" style="display:none;">
+        <label id="subLabel"><i class="fas fa-code-branch"></i> ২. শাখা নির্বাচন করুন</label>
+        <select id="subSelect"></select>
+    </div>
+
+    <button class="btn-save" onclick="saveSettings()">কনফিগারেশন সেভ করুন</button>
+    
+    <div id="displayStatus" class="status-tag" style="display:none;"></div>
+
+    <a href="file_C.html" class="back-link"><i class="fas fa-arrow-left"></i> কন্ট্রোল প্যানেলে ফিরে যান</a>
+</div>
+
+<script>
+    const sheetLinks = {
+        "Class_6": "https://script.google.com/macros/s/AKfycbysPHuMrPMS5lbev7KUfF-giGcc18dIVK-mZF0Ae34JLkCUIYQOCHignEU5QSXq006k/exec",
+        "Class_7": "https://script.google.com/macros/s/AKfycbzgyY7XNMdqZYL4cC15D4rjm1enuxaOeglJUlywR5ejo1bRKy4q2EetLJekjy-BBswqNQ/exec",
+        "Class_8": "https://script.google.com/macros/s/AKfycbyiZ-z7HfWXCAa9soTgVgHiz1ExXSHyuED3PP3XIPWXsQ4qXJvkalnlmbMA8tLZhWq8/exec",
+        "Class_9": "https://script.google.com/macros/s/AKfycbysvNQr6FgcNaXvDzcO0xt0knUNMrWdwvh_9DMyUSX-vVbM0XgBhRIdUgI7FDIA9ydi/exec",
+        "Class_10": "https://script.google.com/macros/s/AKfycbycoXVlJnURqUQ3AlLprzeh6mvfED16R-FSQvQRIVbXhi0tcbTmjytnyWu0i3pQKYftVQ/exec",
+        "Class_SSC": "https://script.google.com/macros/s/AKfycbx5YKt7XXdmhz9w3HdhD9obXag4ZgBRjw9Df3-9lEMVrpyMcV7YWwBvCOEd-fIBp_p0/exec"
+    };
+
+    function checkPass() {
+        const pass = document.getElementById('passInput').value;
+        if(pass === "pm55225522") {
+            document.getElementById('authOverlay').style.display = 'none';
+            document.getElementById('mainCard').style.display = 'block';
+            loadSavedData();
+        } else {
+            alert("ভুল পাসওয়ার্ড!");
+            document.getElementById('passInput').value = "";
+        }
+    }
+
+    function updateSubOptions() {
+        const classVal = document.getElementById('classSelect').value;
+        const subBox = document.getElementById('subOptionBox');
+        const subSelect = document.getElementById('subSelect');
+        const subLabel = document.getElementById('subLabel');
+        
+        subSelect.innerHTML = "";
+        if(!classVal) { subBox.style.display = "none"; return; }
+        subBox.style.display = "block";
+
+        if(["Class_6", "Class_7", "Class_8"].includes(classVal)) {
+            subLabel.innerHTML = '<i class="fas fa-school"></i> ২. শাখা নির্বাচন করুন';
+            const sections = [{n: "ক শাখা", v: "Ka"}, {n: "খ শাখা", v: "Kha"}, {n: "গ শাখা", v: "Ga"}, {n: "ঘ শাখা", v: "Gha"}];
+            sections.forEach(opt => { subSelect.innerHTML += `<option value="${opt.v}">${opt.n}</option>`; });
+        } else {
+            subLabel.innerHTML = '<i class="fas fa-microscope"></i> ২. বিভাগ নির্বাচন করুন';
+            const groups = [{n: "বিজ্ঞান", v: "Sci"}, {n: "ব্যবসায় শিক্ষা", v: "Bus"}, {n: "মানবিক", v: "Hum"}];
+            groups.forEach(opt => { subSelect.innerHTML += `<option value="${opt.v}">${opt.n}</option>`; });
+        }
+    }
+
+    function saveSettings() {
+        const cls = document.getElementById('classSelect').value;
+        const sub = document.getElementById('subSelect').value;
+        
+        if(!cls || !sub) return alert("সবগুলো অপশন সিলেক্ট করুন!");
+
+        let tabPrefix = cls.split('_')[1];
+        let finalSheetName = tabPrefix + "_" + sub;
+
+        localStorage.setItem('active_class', cls);
+        localStorage.setItem('active_sub', sub);
+        localStorage.setItem('active_sheet_url', sheetLinks[cls]);
+        localStorage.setItem('active_tab_name', finalSheetName);
+
+        showStatus(cls, sub, finalSheetName);
+        alert("কনফিগারেশন সফলভাবে সেভ হয়েছে!");
+    }
+
+    function showStatus(cls, sub, tab) {
+        const status = document.getElementById('displayStatus');
+        status.style.display = "block";
+        const className = document.querySelector(`#classSelect option[value="${cls}"]`).text;
+        status.innerHTML = `<i class="fas fa-info-circle"></i> <b>বর্তমান সেটিংস:</b><br>শ্রেণি: ${className}<br>শাখা/বিভাগ: ${sub}<br>গন্তব্য শিট: ${tab}`;
+    }
+
+    function loadSavedData() {
+        const savedCls = localStorage.getItem('active_class');
+        const savedSub = localStorage.getItem('active_sub');
+        if(savedCls) {
+            document.getElementById('classSelect').value = savedCls;
+            updateSubOptions();
+            document.getElementById('subSelect').value = savedSub;
+            showStatus(savedCls, savedSub, localStorage.getItem('active_tab_name'));
+        }
+    }
+
+    document.getElementById('passInput').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') checkPass();
+    });
+</script>
+</body>
+</html>

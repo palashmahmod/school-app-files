@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>ফলাফল বিবরণী লোড হচ্ছে...</title>
+</head>
+<body style="font-family: 'Segoe UI', sans-serif; text-align: center; padding-top: 100px; background-color: #f8f9fa;">
+    
+    <div id="loader">
+        <h3 id="msg">ফলাফল বিবরণী প্রস্তুত হচ্ছে...</h3>
+        <p>দয়া করে কিছুক্ষণ অপেক্ষা করুন।</p>
+    </div>
+
+    <script>
+        window.onload = function() {
+            // CB ফাইল থেকে সেভ করা ডাটা আনা হচ্ছে
+            const savedSetting = localStorage.getItem('master_cb_setting');
+            let targetFile = "";
+
+            // আপনার পরিকল্পনা অনুযায়ী কন্ডিশন
+            if (savedSetting === "junior") {
+                targetFile = "file_BBC.html";
+            } else if (savedSetting === "science") {
+                targetFile = "file_BCAC.html";
+            } else if (savedSetting === "commerce") {
+                targetFile = "file_BCBC.html";
+            } else if (savedSetting === "humanities") {
+                targetFile = "file_BCCC.html";
+            }
+
+            // যদি সেটিং পাওয়া যায় তবে রিডাইরেক্ট করবে
+            if (targetFile !== "") {
+                window.location.replace(targetFile);
+            } else {
+                // যদি CB ফাইলে কিছু সেট করা না থাকে
+                document.getElementById('msg').innerHTML = "<span style='color:red;'>শ্রেণি নির্ধারণ করা নেই!</span>";
+                document.getElementById('loader').innerHTML += 
+                    "<p>দয়া করে আগে কন্ট্রোল প্যানেলের <b>CB ফাইল</b> থেকে শ্রেণি নির্ধারণ করুন।</p>" +
+                    "<a href='file_C.html' style='color:blue; text-decoration:none; font-weight:bold;'>ফিরে যান</a>";
+            }
+        };
+    </script>
+</body>
+</html>

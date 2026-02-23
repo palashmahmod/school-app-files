@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নাম এন্ট্রি (আধুনিক) - ফাইল AA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { 
+            --bg-gradient: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+            --white: #ffffff;
+            --accent: #1a73e8; 
+            --success: #28a745; 
+            --danger: #d93025; 
+            --filled-bg: #e8f5e9; 
+            --text-dark: #333;
+        }
+
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background: #f0f2f5; 
+            margin: 0; padding: 0; 
+            min-height: 100vh;
+        }
+
+        /* স্টিকি টপ নেভিগেশন */
+        .top-nav { 
+            position: sticky; top: 0; background: var(--white); 
+            padding: 12px; display: grid; 
+            grid-template-columns: repeat(3, 1fr); gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000;
+        }
+
+        .container { max-width: 500px; margin: 15px auto; padding: 0 15px 100px 15px; }
+
+        .header-title { 
+            text-align: center; color: var(--text-dark); 
+            margin-bottom: 20px; font-size: 18px; font-weight: bold;
+            background: var(--white); padding: 10px; border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .btn { 
+            padding: 10px 5px; border: none; border-radius: 8px; 
+            color: white; font-weight: bold; cursor: pointer; 
+            font-size: 13px; text-align: center; text-decoration: none;
+            display: flex; align-items: center; justify-content: center; gap: 5px;
+            transition: 0.2s;
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn-save { background: var(--success); } 
+        .btn-paste { background: #673ab7; } 
+        .btn-copy { background: #455a64; } 
+        .btn-clear { background: var(--danger); } 
+        .btn-back { background: #333; }
+
+        /* নাম এন্ট্রি কার্ড */
+        .entry-card { 
+            background: var(--white); padding: 20px; 
+            border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .num-row { 
+            display: flex; align-items: center; gap: 12px; 
+            margin-bottom: 12px; padding-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .num-row span { 
+            width: 35px; font-weight: 800; color: var(--accent); 
+            font-size: 15px; background: #e3f2fd;
+            padding: 8px; border-radius: 6px; text-align: center;
+        }
+
+        input[type="text"] { 
+            flex: 1; padding: 12px; border: 2px solid #eee; 
+            border-radius: 10px; font-size: 15px; outline: none; 
+            transition: all 0.3s; color: var(--text-dark);
+        }
+
+        input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 8px rgba(26,115,232,0.1); }
+
+        input.filled { background-color: var(--filled-bg); border-color: var(--success); font-weight: 600; }
+
+        #copyArea { position: fixed; left: -9999px; }
+
+        .footer-text { text-align: center; font-size: 11px; color: #888; margin-top: 30px; letter-spacing: 1px; }
+
+    </style>
+</head>
+<body onload="loadData()">
+
+    <div class="top-nav">
+        <button class="btn btn-save" onclick="saveNames()"><i class="fas fa-save"></i> সেভ</button>
+        <button class="btn btn-paste" onclick="pasteNames()"><i class="fas fa-paste"></i> পেস্ট</button>
+        <button class="btn btn-copy" onclick="copyNames()"><i class="fas fa-copy"></i> কপি</button>
+        <button class="btn btn-clear" onclick="clearNames()"><i class="fas fa-trash"></i> মুছুন</button>
+        <a href="file_A.html" class="btn btn-back" style="grid-column: span 2;"><i class="fas fa-arrow-left"></i> ফিরে যান</a>
+    </div>
+
+    <div class="container">
+        <div class="header-title"><i class="fas fa-user-edit"></i> শিক্ষার্থীদের নাম এন্ট্রি (১-১৫০)</div>
+        <div class="entry-card" id="fields"></div>
+        <div class="footer-text">POWERED BY PALASH MAHMOD</div>
+    </div>
+
+    <textarea id="copyArea"></textarea>
+
+    <script>
+        const KEY = "school_v3_data";
+        let db = JSON.parse(localStorage.getItem(KEY)) || { s: {} };
+
+        function createFields() {
+            let html = "";
+            for (let i = 1; i <= 150; i++) {
+                let val = db.s[i] || "";
+                let filledClass = val !== "" ? "filled" : "";
+                html += `
+                <div class="num-row">
+                    <span>${toBengali(i)}</span>
+                    <input type="text" id="name_${i}" value="${val}" class="${filledClass}" oninput="handleInput(this)" placeholder="নাম লিখুন...">
+                </div>`;
+            }
+            document.getElementById('fields').innerHTML = html;
+        }
+
+        function handleInput(el) { 
+            if (el.value.trim() !== "") el.classList.add('filled'); 
+            else el.classList.remove('filled'); 
+        }
+
+        function toBengali(n) {
+            const b = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+            let s = n.toString().padStart(2, '0');
+            return s.split('').map(x => b[x] || x).join('');
+        }
+
+        function saveNames() {
+            for (let i = 1; i <= 150; i++) {
+                db.s[i] = document.getElementById('name_' + i).value.trim();
+            }
+            localStorage.setItem(KEY, JSON.stringify(db));
+            alert("নামগুলো সফলভাবে সংরক্ষিত হয়েছে!");
+        }
+
+        function pasteNames() {
+            let raw = prompt("Excel বা অন্য জায়গা থেকে নামগুলো এখানে পেস্ট করুন:");
+            if (!raw) return;
+
+            let namesArray = raw.split(/\r?\n/).map(line => {
+                let parts = line.split('\t');
+                return parts.length > 1 ? parts[1].trim() : parts[0].trim();
+            }).filter(n => n !== "");
+
+            namesArray.forEach((name, index) => {
+                if (index < 150) {
+                    let input = document.getElementById('name_' + (index + 1));
+                    if (input) { 
+                        input.value = name; 
+                        input.classList.add('filled'); 
+                    }
+                }
+            });
+            alert(namesArray.length + " টি নাম ইনপুট করা হয়েছে। সংরক্ষণ করতে 'সেভ' বাটনে ক্লিক করুন।");
+        }
+
+        function copyNames() {
+            let text = "";
+            for (let i = 1; i <= 150; i++) {
+                let name = document.getElementById('name_' + i).value.trim();
+                if (name !== "") {
+                    // Excel ফরম্যাটের জন্য রোলের আগে (') চিহ্ন সহ কপি হচ্ছে
+                    text += "'" + toBengali(i) + "\t" + name + "\n";
+                }
+            }
+            if (!text) {
+                alert("কপি করার মতো কোনো নাম নেই!");
+                return;
+            }
+            let area = document.getElementById('copyArea');
+            area.value = text; 
+            area.select();
+            document.execCommand('copy');
+            alert("নামগুলো Excel Format-এ কপি হয়েছে!");
+        }
+
+        function clearNames() { 
+            if (confirm("সতর্কতা: আপনি কি নিশ্চিতভাবে সব নাম মুছে ফেলতে চান?")) { 
+                db.s = {}; 
+                localStorage.setItem(KEY, JSON.stringify(db)); 
+                createFields(); 
+            } 
+        }
+
+        function loadData() { createFields(); }
+    </script>
+</body>
+</html>

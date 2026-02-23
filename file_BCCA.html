@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>মানবিক লজিক নির্ধারণ - BCCA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { 
+            --bg-gradient: linear-gradient(135deg, #455a64 0%, #263238 100%); /* মানবিক বিভাগের জন্য স্লেট থিম */
+            --white: #ffffff;
+            --accent: #607d8b; 
+            --dark: #333;
+        }
+
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background: var(--bg-gradient); 
+            background-attachment: fixed;
+            margin: 0; padding: 20px; 
+            display: flex; align-items: center; justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container { 
+            width: 100%;
+            max-width: 500px; 
+            background: #fff; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .header { text-align: center; margin-bottom: 25px; }
+        .header h1 { 
+            font-size: 20px; 
+            color: var(--dark);
+            margin: 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--accent);
+            display: inline-block;
+        }
+        
+        .section-title { 
+            font-weight: bold; 
+            margin-bottom: 15px; 
+            display: block; 
+            background: #f1f3f4; 
+            padding: 10px 15px; 
+            border-radius: 8px; 
+            font-size: 14px; 
+            color: #555;
+            border-left: 5px solid var(--accent);
+        }
+        
+        .section-card { margin-bottom: 25px; }
+
+        /* নির্ধারিত অপশনাল বক্স */
+        .auto-box { 
+            background: #eceff1; 
+            border: 2px dashed var(--accent); 
+            border-radius: 12px; 
+            padding: 20px; 
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .auto-box h3 { margin: 5px 0; color: #263238; font-size: 20px; }
+        .info-text { font-size: 11px; color: #666; font-style: italic; }
+
+        /* সিলেকশন কার্ড স্টাইল */
+        .option-card { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            padding: 15px; 
+            border: 2px solid #eee; 
+            border-radius: 12px; 
+            margin-bottom: 12px; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+        }
+
+        .option-card:has(input:checked) {
+            border-color: var(--accent);
+            background-color: #f5f7f8;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .option-card:hover { border-color: var(--accent); background: #fafafa; }
+        
+        .option-card input { 
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent);
+        }
+        
+        .option-card label { 
+            cursor: pointer; 
+            font-weight: 600; 
+            flex: 1; 
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .btn-save { 
+            width: 100%; 
+            padding: 15px; 
+            background: var(--accent); 
+            color: #fff; 
+            border: none; 
+            border-radius: 12px; 
+            font-weight: bold; 
+            font-size: 16px; 
+            cursor: pointer;
+            box-shadow: 0 4px 0px #455a64;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-save:active { 
+            transform: translateY(3px); 
+            box-shadow: none; 
+        }
+
+        .back-link { 
+            display: block; 
+            text-align: center; 
+            margin-top: 25px; 
+            text-decoration: none; 
+            color: #d93025; 
+            font-weight: bold; 
+            font-size: 14px;
+        }
+
+        .footer-text { 
+            text-align: center; 
+            font-size: 10px; 
+            margin-top: 30px; 
+            color: #aaa; 
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-users"></i> মানবিক বিভাগ লজিক (BCCA)</h1>
+    </div>
+
+    <div class="section-card">
+        <span class="section-title"><i class="fas fa-thumbtack"></i> ১. নির্ধারিত অপশনাল বিষয়:</span>
+        <div class="auto-box">
+            <p style="margin: 0; font-size: 13px; color: #444;">এই বিভাগের ডিফল্ট বিষয়:</p>
+            <h3><i class="fas fa-home"></i> গার্হস্থ্য বিজ্ঞান</h3>
+            <p class="info-text">*রেজাল্ট শিটে এটি স্বয়ংক্রিয়ভাবে ৪র্থ বিষয় হিসেবে গণ্য হবে।</p>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <span class="section-title"><i class="fas fa-calculator"></i> ২. GPA পদ্ধতি সিলেকশন:</span>
+        
+        <div class="option-card" onclick="document.getElementById('logic1').checked=true">
+            <input type="radio" name="gpaLogic" id="logic1" value="ssc_logic">
+            <label for="logic1">SSC পরীক্ষার GPA লজিক (F1, F2 সহ)</label>
+        </div>
+
+        <div class="option-card" onclick="document.getElementById('logic2').checked=true">
+            <input type="radio" name="gpaLogic" id="logic2" value="no_logic">
+            <label for="logic2">GPA লজিক ছাড়া (শুধুমাত্র F1, F2 লজিক)</label>
+        </div>
+    </div>
+
+    <button class="btn-save" onclick="saveBCCASettings()">
+        <i class="fas fa-save"></i> লজিক সেটআপ নিশ্চিত করুন
+    </button>
+
+    <a href="file_BCC.html" class="back-link">
+        <i class="fas fa-chevron-left"></i> ফিরে যান
+    </a>
+
+    <div class="footer-text">POWERED BY PALASH MAHMOD</div>
+</div>
+
+<script>
+    window.onload = function() {
+        const savedLogic = localStorage.getItem('bcca_gpa_logic');
+        if(savedLogic) {
+            const input = document.querySelector(`input[value="${savedLogic}"]`);
+            if(input) input.checked = true;
+        }
+    };
+
+    function saveBCCASettings() {
+        const logic = document.querySelector('input[name="gpaLogic"]:checked');
+
+        if(!logic) {
+            alert("দয়া করে GPA পদ্ধতি সিলেক্ট করুন!");
+            return;
+        }
+
+        // ডাটা সেভ - মানবিক বিভাগের জন্য bcca_ কি-ওয়ার্ড ব্যবহার
+        localStorage.setItem('bcca_optional', 'home_science');
+        localStorage.setItem('bcca_gpa_logic', logic.value);
+        
+        alert("মানবিক বিভাগের লজিক সফলভাবে সেভ করা হয়েছে!");
+    }
+</script>
+</body>
+</html>
