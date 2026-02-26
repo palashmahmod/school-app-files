@@ -5,19 +5,27 @@
     <title>ফলাফল বিবরণী লোড হচ্ছে...</title>
 </head>
 <body style="font-family: 'Segoe UI', sans-serif; text-align: center; padding-top: 100px; background-color: #f8f9fa;">
-    
+
     <div id="loader">
         <h3 id="msg">ফলাফল বিবরণী প্রস্তুত হচ্ছে...</h3>
-        <p>দয়া করে কিছুক্ষণ অপেক্ষা করুন।</p>
+        <div class="spinner" style="border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto;"></div>
+        <p>দয়া করে কিছুক্ষণ অপেক্ষা করুন।</p>
     </div>
+
+    <style>
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
 
     <script>
         window.onload = function() {
+            // টাইমস্ট্যাম্প জেনারেটর (Cache Busting)
+            const v = new Date().getTime();
+            
             // CB ফাইল থেকে সেভ করা ডাটা আনা হচ্ছে
             const savedSetting = localStorage.getItem('master_cb_setting');
             let targetFile = "";
 
-            // আপনার পরিকল্পনা অনুযায়ী কন্ডিশন
+            // কন্ডিশন অনুযায়ী ফাইল নির্ধারণ
             if (savedSetting === "junior") {
                 targetFile = "file_BBC.html";
             } else if (savedSetting === "science") {
@@ -28,15 +36,16 @@
                 targetFile = "file_BCCC.html";
             }
 
-            // যদি সেটিং পাওয়া যায় তবে রিডাইরেক্ট করবে
+            // যদি সেটিং পাওয়া যায় তবে রিডাইরেক্ট করবে (Cache Busting সহ)
             if (targetFile !== "") {
-                window.location.replace(targetFile);
+                window.location.replace(targetFile + "?v=" + v);
             } else {
                 // যদি CB ফাইলে কিছু সেট করা না থাকে
                 document.getElementById('msg').innerHTML = "<span style='color:red;'>শ্রেণি নির্ধারণ করা নেই!</span>";
+                document.querySelector('.spinner').style.display = 'none';
                 document.getElementById('loader').innerHTML += 
-                    "<p>দয়া করে আগে কন্ট্রোল প্যানেলের <b>CB ফাইল</b> থেকে শ্রেণি নির্ধারণ করুন।</p>" +
-                    "<a href='file_C.html' style='color:blue; text-decoration:none; font-weight:bold;'>ফিরে যান</a>";
+                    "<p>দয়া করে আগে কন্ট্রোল প্যানেলের <b>CB ফাইল</b> থেকে শ্রেণি নির্ধারণ করুন।</p>" +
+                    "<a href='file_C.html?v=" + v + "' style='color:blue; text-decoration:none; font-weight:bold;'>কন্ট্রোল প্যানেলে ফিরে যান</a>";
             }
         };
     </script>
