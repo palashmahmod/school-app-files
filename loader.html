@@ -23,7 +23,7 @@
 </div>
 
 <script>
-    // আপনার দেওয়া সেই নিখুঁত Firebase কনফিগ
+    // Firebase কনফিগারেশন
     const firebaseConfig = {
         apiKey: "AIzaSyDrIXV59kVjFKFKARHVJix7HuAU1FUfDk4",
         authDomain: "school-management-system-1279f.firebaseapp.com",
@@ -35,29 +35,30 @@
         measurementId: "G-37D4DBEY18"
     };
 
-    // Firebase শুরু করা
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
-
     const statusText = document.getElementById('status-text');
 
-    // Firebase থেকে কন্ট্রোল ডাটা চেক করা
+    // Cache Busting-এর জন্য টাইমস্ট্যাম্প জেনারেটর
+    const v = new Date().getTime();
+
     database.ref('control').once('value').then((snapshot) => {
         const data = snapshot.val();
         
         if (data && data.update_status === true) {
-            // অনলাইন মোড: সরাসরি GitHub এর ফাইলে রিডাইরেক্ট করবে
-            statusText.innerText = "আপডেট চেক করা হচ্ছে...";
-            // এখানে online_url এর সাথে index.html যুক্ত করা হয়েছে
-            window.location.href = data.online_url + "index.html";
+            statusText.innerText = "অনলাইন আপডেট চেক করা হচ্ছে...";
+            // অনলাইন URL-এর সাথে টাইমস্ট্যাম্প যুক্ত করা হয়েছে
+            const onlineTarget = data.online_url + "index.html?v=" + v;
+            window.location.replace(onlineTarget);
         } else {
-            // অফলাইন মোড বা আপডেট বন্ধ থাকলে ফোনের লোকাল index.html ওপেন হবে
-            window.location.href = "index.html";
+            statusText.innerText = "অ্যাপ শুরু হচ্ছে...";
+            // লোকাল ফাইলের সাথেও টাইমস্ট্যাম্প যুক্ত করা হয়েছে
+            window.location.href = "index.html?v=" + v;
         }
     }).catch((error) => {
         console.error("Firebase Connection Error:", error);
-        // ইন্টারনেট না থাকলে সরাসরি লোকাল ফাইল লোড হবে
-        window.location.href = "index.html";
+        // ইন্টারনেট না থাকলে বা এরর হলে লোকাল ফাইল লোড হবে
+        window.location.href = "index.html?v=" + v;
     });
 </script>
 </body>
