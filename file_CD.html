@@ -6,108 +6,24 @@
     <title>সিস্টেম স্ট্যাটাস - CD</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #2c3e50;
-            --accent: #3498db;
-            --bg: #f4f7f6;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background: var(--bg);
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            color: var(--primary);
-        }
-        .card {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            border: 2px solid #000;
-        }
-        .profile-img {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            border: 4px solid var(--accent);
-            margin: 0 auto 15px;
-            display: block;
-            object-fit: cover;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            background: #eee;
-        }
-        .icon-box {
-            font-size: 35px;
-            color: #e67e22;
-            margin-bottom: 10px;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        h2 {
-            margin: 10px 0;
-            font-size: 22px;
-            color: #d35400;
-        }
-        p {
-            font-size: 15px;
-            color: #7f8c8d;
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-        .btn-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: #000;
-            color: white;
-            padding: 12px 28px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-        .btn-back:hover {
-            background: #333;
-            transform: translateY(-2px);
-        }
-        .footer {
-            margin-top: 30px;
-            font-size: 11px;
-            font-weight: bold;
-            letter-spacing: 1.5px;
-            color: #95a5a6;
-            border-top: 1px solid #eee;
-            padding-top: 15px;
-        }
-        .loader {
-            width: 25px;
-            height: 25px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 10px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        :root { --primary: #2c3e50; --accent: #3498db; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; color: var(--primary); }
+        .card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 90%; border: 2px solid #000; }
+        .profile-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid var(--accent); margin: 0 auto 15px; display: block; object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.2); background: #eee; }
+        .icon-box { font-size: 35px; color: #e67e22; margin-bottom: 10px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        h2 { margin: 10px 0; font-size: 22px; color: #d35400; }
+        p { font-size: 15px; color: #7f8c8d; margin-bottom: 25px; line-height: 1.5; }
+        .btn-back { display: inline-flex; align-items: center; gap: 10px; background: #000; color: white; padding: 12px 28px; border-radius: 50px; text-decoration: none; font-weight: bold; transition: 0.3s; cursor: pointer; }
+        .btn-back:hover { background: #333; transform: translateY(-2px); }
+        .footer { margin-top: 30px; font-size: 11px; font-weight: bold; letter-spacing: 1.5px; color: #95a5a6; border-top: 1px solid #eee; padding-top: 15px; }
+        .loader { width: 25px; height: 25px; border: 3px solid #f3f3f3; border-top: 3px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite; margin: 10px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body>
+<body onload="applyImgCache()">
 <div class="card">
-    <img src="palash.jpg" alt="Palash Mahmod" class="profile-img">
+    <img id="user-photo" src="palash.jpg" alt="Palash Mahmod" class="profile-img">
     
     <div class="icon-box">
         <i class="fas fa-tools"></i>
@@ -127,6 +43,14 @@
 </div>
 
 <script>
+    // ইমেজে ক্যাশ বাস্টিং অ্যাপ্লাই করা
+    function applyImgCache() {
+        const timestamp = new Date().getTime();
+        const photo = document.getElementById('user-photo');
+        // ছবি লোড করার সময় লিঙ্কের শেষে টাইমস্ট্যাম্প যোগ হবে
+        photo.src = "palash.jpg?v=" + timestamp;
+    }
+
     // Cache Busting Navigation
     function navigateHome() {
         const timestamp = new Date().getTime();
