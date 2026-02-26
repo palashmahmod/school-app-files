@@ -23,12 +23,10 @@
             flex-direction: column; 
             min-height: 100vh; 
         }
-
         .container { 
             width: 100%; max-width: 500px; padding: 25px; margin: 0 auto;
             box-sizing: border-box; display: flex; flex-direction: column; min-height: 100vh;
         }
-
         .header { text-align: center; margin-bottom: 45px; margin-top: 20px; color: var(--white); }
         .header h1 { 
             font-size: 22px; 
@@ -39,8 +37,7 @@
         .grid-container { 
             display: grid; grid-template-columns: 1fr 1fr; gap: 25px; width: 100%; 
         }
-
-        /* --- ৩ডি মেনু কার্ডস (হোম মেনুর মতো নিচে ও ডানে ছায়া) --- */
+        /* --- ৩ডি মেনু কার্ডস (হোম মেনুর মতো নিচে ও ডানে ছায়া) --- */
         .menu-card { 
             height: 140px; background: var(--white); 
             border-radius: 22px; display: flex; flex-direction: column; 
@@ -50,19 +47,15 @@
             box-shadow: 8px 8px 15px rgba(0,0,0,0.4); 
             border: none;
         }
-
         /* হোভার করলে সামান্য মুভমেন্ট */
         .menu-card:hover { transform: translate(-2px, -2px); box-shadow: 12px 12px 20px rgba(0,0,0,0.5); }
         
         /* ক্লিক করলে ৩ডি পুশ ইফেক্ট */
         .menu-card:active { transform: translate(6px, 6px); box-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
-
         .menu-card i { font-size: 38px; margin-bottom: 15px; }
         .card-name i { color: #1a73e8; } /* Blue */
         .card-info i { color: #2ecc71; } /* Green */
-
         .menu-card span { font-size: 14px; font-weight: 700; text-align: center; padding: 0 10px; color: var(--text-dark); }
-
         /* --- ব্যাক বাটন --- */
         .back-btn-container { margin-top: auto; padding-bottom: 40px; text-align: center; }
         .back-link { 
@@ -78,10 +71,10 @@
             display: inline-block;
             box-shadow: 5px 5px 12px rgba(0,0,0,0.2);
             border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
         }
         .back-link:hover { background: var(--primary-blue); transform: translateY(-2px); }
         .back-link:active { transform: translate(2px, 2px); box-shadow: none; }
-
         .footer-text {
             font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5);
             text-align: center; padding: 25px; letter-spacing: 2px;
@@ -89,33 +82,35 @@
         }
     </style>
 </head>
-
 <body>
     <div class="container">
         <div class="header">
             <h1>শিক্ষার্থী তথ্য ব্যবস্থাপনা</h1>
             <div style="width: 40px; height: 3px; background: var(--primary-blue); margin: 8px auto; border-radius: 2px;"></div>
         </div>
-
         <div class="grid-container">
-            <a href="file_AA.html" class="menu-card card-name">
+            <a href="#" onclick="navigateWithCacheBusting('file_AA.html')" class="menu-card card-name">
                 <i class="fas fa-user-edit"></i>
                 <span>শিক্ষার্থীদের নাম এন্ট্রি</span>
             </a>
-
-            <a href="file_AB.html" class="menu-card card-info">
+            <a href="#" onclick="navigateWithCacheBusting('file_AB.html')" class="menu-card card-info">
                 <i class="fas fa-address-card"></i>
                 <span>অন্যান্য তথ্য</span>
             </a>
         </div>
-
         <div class="back-btn-container">
-            <a href="index.html" class="back-link">
+            <a href="#" onclick="navigateWithCacheBusting('index.html')" class="back-link">
                 <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> হোম পেইজে ফিরে যান
             </a>
         </div>
-
         <div class="footer-text">POWERED BY PALASH MAHMOD</div>
     </div>
+
+    <script>
+        function navigateWithCacheBusting(page) {
+            const timestamp = new Date().getTime();
+            window.location.href = page + "?v=" + timestamp;
+        }
+    </script>
 </body>
 </html>
