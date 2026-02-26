@@ -22,21 +22,17 @@
             padding: 20px 15px; 
             color: var(--text-dark);
         }
-
         .container { max-width: 600px; margin: 0 auto; }
-
         .header { text-align: center; margin-bottom: 30px; color: var(--white); }
         .header h1 { font-size: 22px; font-weight: 800; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
-
         /* সেকশন কার্ড ডিজাইন */
         .section-card { 
             background: var(--white); 
             border-radius: 20px; 
             padding: 20px; 
             margin-bottom: 25px; 
-            box-shadow: 8px 8px 15px rgba(0,0,0,0.4); /* ৩ডি শ্যাডো */
+            box-shadow: 8px 8px 15px rgba(0,0,0,0.4); 
         }
-
         h2 { 
             font-size: 16px; 
             margin-top: 0;
@@ -48,10 +44,7 @@
             border-bottom: 2px solid #f0f2f5; 
             padding-bottom: 10px; 
         }
-
         .option-group { display: flex; flex-direction: column; gap: 12px; }
-
-        /* রেডিও বাটন অপশন আইটেম */
         .option-item { 
             display: flex; 
             align-items: center; 
@@ -64,9 +57,7 @@
             background: #fff;
             position: relative;
         }
-
         .option-item:hover { background: #fafafa; border-color: #d1d9e6; }
-
         .option-item input[type="radio"] { 
             margin: 0; 
             width: 18px; 
@@ -74,7 +65,6 @@
             cursor: pointer; 
             accent-color: var(--primary-blue);
         }
-
         .option-item label { 
             cursor: pointer; 
             font-size: 13px; 
@@ -83,16 +73,12 @@
             color: #444; 
             font-weight: 500;
         }
-
-        /* সিলেক্টেড স্টাইল */
         .option-item:has(input:checked) { 
             border-color: var(--primary-blue); 
             background: var(--accent-light); 
             box-shadow: inset 0 0 0 1px var(--primary-blue);
         }
-
         input[type="radio"]:checked + label { font-weight: 700; color: #000; }
-
         .badge { 
             background: var(--primary-blue); 
             color: white; 
@@ -103,8 +89,6 @@
             margin-right: 5px;
             text-transform: uppercase;
         }
-
-        /* একশন বাটন */
         .btn-save { 
             width: 100%; 
             padding: 16px; 
@@ -116,19 +100,17 @@
             font-weight: bold; 
             cursor: pointer; 
             margin: 10px 0; 
-            box-shadow: 0 6px 0px #1e8449, 0 10px 15px rgba(0,0,0,0.3); /* ৩ডি পুশ লুক */
+            box-shadow: 0 6px 0px #1e8449, 0 10px 15px rgba(0,0,0,0.3); 
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
             transition: 0.1s;
         }
-
         .btn-save:active { 
             transform: translateY(4px); 
             box-shadow: 0 2px 0px #1e8449, 0 5px 10px rgba(0,0,0,0.2); 
         }
-
         .back-link { 
             display: block; 
             text-align: center; 
@@ -139,9 +121,9 @@
             font-weight: bold;
             opacity: 0.8;
             transition: 0.3s;
+            cursor: pointer;
         }
         .back-link:hover { opacity: 1; text-decoration: underline; }
-
         .footer-text { 
             text-align: center; 
             font-size: 10px; 
@@ -152,13 +134,11 @@
         }
     </style>
 </head>
-
 <body>
 <div class="container">
     <div class="header">
         <h1><i class="fas fa-microchip" style="margin-right: 10px;"></i> লজিক কন্ট্রোল প্যানেল</h1>
     </div>
-
     <div class="section-card">
         <h2><i class="fas fa-vial"></i> বিষয়ভিত্তিক পাশ ও গ্রেড সিস্টেম</h2>
         <div class="option-group">
@@ -166,34 +146,28 @@
                 <input type="radio" name="master_logic" id="ml1" value="1">
                 <label for="ml1"><span class="badge">অপশন ১</span> বাংলা/ইংরেজি মোট ৫০ পাস। অন্যান্য বিষয়ে ৩৩/১৭ পাস। (CQ/MCQ আলাদা নয়)</label>
             </div>
-
             <div class="option-item" onclick="this.querySelector('input').click()">
                 <input type="radio" name="master_logic" id="ml2" value="2">
                 <label for="ml2"><span class="badge">অপশন ২</span> বাংলা/ইংরেজি উভয় পত্রে আলাদাভাবে (৩৩ ও ১৭) পাস হতে হবে।</label>
             </div>
-
             <div class="option-item" onclick="this.querySelector('input').click()">
                 <input type="radio" name="master_logic" id="ml3" value="3">
                 <label for="ml3"><span class="badge">অপশন ৩</span> সকল বিষয়ে CQ, MCQ এবং ICT-তে Practical আলাদাভাবে পাস।</label>
             </div>
-
             <div class="option-item" onclick="this.querySelector('input').click()">
                 <input type="radio" name="master_logic" id="ml4" value="4">
                 <label for="ml4"><span class="badge">অপশন ৪</span> ৩ নং লজিকের মত, তবে বাংলা ২য় পত্রে শুধু ১৭ পাস (CQ/MCQ আলাদা নয়)।</label>
             </div>
-
             <div class="option-item" onclick="this.querySelector('input').click()">
                 <input type="radio" name="master_logic" id="ml5" value="5">
                 <label for="ml5"><span class="badge">অপশন ৫</span> ৩ নং লজিকের মত, তবে ICT মোট ১৭ পাস (CQ/PRAC আলাদা নয়)।</label>
             </div>
-
             <div class="option-item" onclick="this.querySelector('input').click()">
                 <input type="radio" name="master_logic" id="ml6" value="6">
                 <label for="ml6"><span class="badge">অপশন ৬</span> ৪ নং লজিকের মত, তবে ICT মোট ১৭ পাস (CQ/PRAC আলাদা নয়)।</label>
             </div>
         </div>
     </div>
-
     <div class="section-card">
         <h2><i class="fas fa-calculator"></i> GPA ক্যালকুলেশন পদ্ধতি</h2>
         <div class="option-group">
@@ -201,24 +175,25 @@
                 <input type="radio" name="gpa_logic" id="gl1" value="1">
                 <label for="gl1"><span class="badge">পদ্ধতি ১</span> GPA (৫.০০ স্কেলে) দেখানো হবে। ফেল করলে F1, F2 দেখাবে।</label>
             </div>
-
             <div class="option-item" onclick="this.querySelector('input').click()">
                 <input type="radio" name="gpa_logic" id="gl2" value="2">
                 <label for="gl2"><span class="badge">পদ্ধতি ২</span> পাস করলে GPA ঘর ফাঁকা থাকবে। ফেল করলে F1, F2 দেখাবে।</label>
             </div>
         </div>
     </div>
-
     <button class="btn-save" onclick="saveNewLogics()">
         <i class="fas fa-save"></i> নতুন লজিক সেট করুন
     </button>
-
-    <a href="file_BB.html" class="back-link"><i class="fas fa-arrow-left"></i> আগের পেইজে ফিরে যান</a>
-
+    <div onclick="navigateWithCacheBusting('file_BB.html')" class="back-link"><i class="fas fa-arrow-left"></i> আগের পেইজে ফিরে যান</div>
     <div class="footer-text">SYSTEM DESIGN BY PALASH MAHMOD</div>
 </div>
 
 <script>
+    function navigateWithCacheBusting(page) {
+        const timestamp = new Date().getTime();
+        window.location.href = page + "?v=" + timestamp;
+    }
+
     window.onload = function() {
         const saved = JSON.parse(localStorage.getItem('bba_master_settings'));
         if(saved) {
@@ -241,7 +216,6 @@
             alert("দয়া করে পাশ-গ্রেড লজিক এবং GPA পদ্ধতি উভয়ই সিলেক্ট করুন!");
             return;
         }
-
         const settings = {
             master_logic: mlValue,
             gpa_logic: glValue
@@ -249,6 +223,10 @@
         
         localStorage.setItem('bba_master_settings', JSON.stringify(settings));
         alert("অভিনন্দন! আপনার লজিক সিস্টেম সফলভাবে সংরক্ষিত হয়েছে।");
+        
+        // রিফ্রেশ করার সময়ও ক্যাশ বাস্টিং ব্যবহার করা হচ্ছে
+        const currentPage = window.location.pathname.split('/').pop();
+        navigateWithCacheBusting(currentPage);
     }
 </script>
 </body>
