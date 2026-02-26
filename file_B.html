@@ -23,22 +23,19 @@
             flex-direction: column; 
             min-height: 100vh; 
         }
-
         .container { 
             width: 100%; max-width: 500px; padding: 25px; margin: 0 auto;
             box-sizing: border-box; display: flex; flex-direction: column; min-height: 100vh;
         }
-
         .header { text-align: center; margin-bottom: 40px; margin-top: 20px; color: var(--white); }
         .header h1 { 
             font-size: 22px; 
             text-shadow: 2px 2px 5px rgba(0,0,0,0.3); 
             font-weight: 800;
         }
-
         /* ডাইনামিক বাটনগুলোর ৩ডি ডিজাইন */
         .dynamic-btn { 
-            display: none; /* জাভাস্ক্রিপ্ট দিয়ে কন্ট্রোল করা হয় */
+            display: none; /* জাভাস্ক্রিপ্ট দিয়ে কন্ট্রোল করা হয় */
             height: 120px; background: var(--white); 
             border-radius: 22px; flex-direction: column; 
             justify-content: center; align-items: center; 
@@ -48,17 +45,13 @@
             gap: 12px;
             margin-bottom: 20px;
         }
-
         .dynamic-btn i { font-size: 35px; color: var(--primary-blue); }
         .dynamic-btn span { font-size: 15px; font-weight: 700; color: var(--text-dark); text-align: center; padding: 0 15px; }
-
         /* ক্লিক ইফেক্ট */
         .dynamic-btn:active { transform: translate(6px, 6px); box-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
-
         /* এনিমেশন শো করার জন্য ক্লাস */
         .show-flex { display: flex !important; animation: slideIn 0.5s ease; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
         .error-msg { 
             background: rgba(255, 71, 87, 0.2); 
             color: #ff9f9f; 
@@ -70,7 +63,6 @@
             border: 1px solid var(--danger);
             text-align: center;
         }
-
         .back-btn-container { margin-top: auto; padding-bottom: 40px; text-align: center; }
         .back-link { 
             text-decoration: none; 
@@ -85,9 +77,9 @@
             display: inline-block;
             box-shadow: 5px 5px 12px rgba(0,0,0,0.2);
             border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
         }
         .back-link:hover { background: #d93025; transform: translateY(-2px); }
-
         .footer-text {
             font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5);
             text-align: center; padding: 25px; letter-spacing: 2px;
@@ -95,47 +87,43 @@
         }
     </style>
 </head>
-
 <body>
 <div class="container">
-
     <div class="header"><h1>নম্বর এন্ট্রি ম্যানেজমেন্ট (B)</h1></div>
-    
     <div id="error" class="error-msg">
         <i class="fas fa-triangle-exclamation"></i> কোনো শ্রেণি নির্ধারণ করা নেই!
     </div>
-
     <div class="grid-container">
-        <a href="file_BB.html" class="dynamic-btn" id="btn_junior">
+        <div onclick="navigateWithCacheBusting('file_BB.html')" class="dynamic-btn" id="btn_junior">
             <i class="fas fa-book-open"></i>
             <span>৬ষ্ঠ-৮ম শ্রেণির নম্বর এন্ট্রি (BB)</span>
-        </a>
-
-        <a href="file_BCA.html" class="dynamic-btn" id="btn_science">
+        </div>
+        <div onclick="navigateWithCacheBusting('file_BCA.html')" class="dynamic-btn" id="btn_science">
             <i class="fas fa-flask-vial"></i>
             <span>৯ম-১০ম (বিজ্ঞান) এন্ট্রি (BCA)</span>
-        </a>
-
-        <a href="file_BCB.html" class="dynamic-btn" id="btn_commerce">
+        </div>
+        <div onclick="navigateWithCacheBusting('file_BCB.html')" class="dynamic-btn" id="btn_commerce">
             <i class="fas fa-chart-pie"></i>
             <span>৯ম-১০ম (ব্যবসায়) এন্ট্রি (BCB)</span>
-        </a>
-
-        <a href="file_BCC.html" class="dynamic-btn" id="btn_humanities">
+        </div>
+        <div onclick="navigateWithCacheBusting('file_BCC.html')" class="dynamic-btn" id="btn_humanities">
             <i class="fas fa-landmark-dome"></i>
             <span>৯ম-১০ম (মানবিক) এন্ট্রি (BCC)</span>
-        </a>
+        </div>
     </div>
-
     <div class="back-btn-container">
-        <a href="index.html" class="back-link"><i class="fas fa-home"></i> আগের পেইজে ফিরে যান</a>
+        <a href="#" onclick="navigateWithCacheBusting('index.html')" class="back-link"><i class="fas fa-home"></i> আগের পেইজে ফিরে যান</a>
     </div>
-
     <div class="footer-text">POWERED BY PALASH MAHMOD</div>
-
 </div>
 
 <script>
+    // Cache Busting Navigation Function
+    function navigateWithCacheBusting(page) {
+        const timestamp = new Date().getTime();
+        window.location.href = page + "?v=" + timestamp;
+    }
+
     window.onload = function() {
         const savedSetting = localStorage.getItem('master_cb_setting');
         const btnJunior = document.getElementById('btn_junior');
@@ -144,7 +132,6 @@
         const btnHumanities = document.getElementById('btn_humanities');
         const errorMsg = document.getElementById('error');
 
-        // পূর্বের সব লজিক ঠিক রাখা হয়েছে
         if (savedSetting === "junior") {
             btnJunior.classList.add('show-flex');
         } else if (savedSetting === "science") {
