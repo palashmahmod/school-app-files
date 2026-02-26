@@ -22,45 +22,37 @@
             flex-direction: column; 
             min-height: 100vh; 
         }
-
         .container { 
             width: 100%; max-width: 500px; padding: 25px; margin: 0 auto;
             box-sizing: border-box; display: flex; flex-direction: column; min-height: 100vh;
         }
-
         .header { text-align: center; margin-bottom: 40px; margin-top: 20px; color: var(--white); }
         .header h1 { 
             font-size: 22px; 
             text-shadow: 2px 2px 5px rgba(0,0,0,0.3); 
             font-weight: 800;
         }
-
         .grid-container { display: flex; flex-direction: column; gap: 20px; }
-
         /* --- ৩ডি মেনু কার্ডস (ফুল উইথ) --- */
         .menu-card { 
             display: flex; padding: 22px; background: var(--white); 
             border-radius: 20px; align-items: center; 
             gap: 18px; color: var(--text-dark); text-decoration: none; 
             font-weight: 700; transition: all 0.2s ease; 
-            /* নিচে ও ডানে প্রফেশনাল ৩ডি শ্যাডো */
             box-shadow: 8px 8px 15px rgba(0,0,0,0.4); 
             border: none;
+            cursor: pointer;
         }
-
         /* হোভার এবং ক্লিক ইফেক্ট */
         .menu-card:hover { transform: translate(-2px, -2px); box-shadow: 10px 10px 20px rgba(0,0,0,0.5); }
         .menu-card:active { transform: translate(6px, 6px); box-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
-
         .menu-card i { 
             font-size: 26px; color: var(--primary-blue); 
             width: 40px; height: 40px; background: #f0f4f8;
             display: flex; align-items: center; justify-content: center;
             border-radius: 12px;
         }
-
         .menu-card span { font-size: 16px; }
-
         /* --- ব্যাক বাটন --- */
         .back-btn-container { margin-top: auto; padding-bottom: 40px; text-align: center; }
         .back-link { 
@@ -76,10 +68,10 @@
             display: inline-block;
             box-shadow: 5px 5px 12px rgba(0,0,0,0.2);
             border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
         }
         .back-link:hover { background: #d93025; transform: translateY(-2px); }
         .back-link:active { transform: translate(2px, 2px); box-shadow: none; }
-
         .footer-text {
             font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5);
             text-align: center; padding: 25px; letter-spacing: 2px;
@@ -93,30 +85,34 @@
             <h1>৬ষ্ঠ-৮ম শ্রেণি (সাধারণ)</h1>
             <div style="width: 50px; height: 3px; background: var(--primary-blue); margin: 8px auto; border-radius: 2px;"></div>
         </div>
-
         <div class="grid-container">
-            <a href="file_BBA.html" class="menu-card">
+            <div onclick="navigateWithCacheBusting('file_BBA.html')" class="menu-card">
                 <i class="fas fa-cog"></i>
                 <span>১. লজিক নির্ধারণ</span>
-            </a>
-
-            <a href="file_BBB.html" class="menu-card">
+            </div>
+            <div onclick="navigateWithCacheBusting('file_BBB.html')" class="menu-card">
                 <i class="fas fa-pen-to-square"></i>
                 <span>২. বিষয়ে নম্বর এন্ট্রি</span>
-            </a>
-
-            <a href="file_BBC.html" class="menu-card">
+            </div>
+            <div onclick="navigateWithCacheBusting('file_BBC.html')" class="menu-card">
                 <i class="fas fa-file-lines"></i>
                 <span>৩. ফলাফল বিবরণী</span>
-            </a>
+            </div>
         </div>
-
         <div class="back-btn-container">
-            <a href="file_B.html" class="back-link">
+            <div onclick="navigateWithCacheBusting('file_B.html')" class="back-link">
                 <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> আগের পেইজে ফিরে যান
-            </a>
+            </div>
         </div>
     </div>
     <div class="footer-text">POWERED BY PALASH MAHMOD</div>
+
+    <script>
+        // Cache Busting Navigation Function
+        function navigateWithCacheBusting(page) {
+            const timestamp = new Date().getTime();
+            window.location.href = page + "?v=" + timestamp;
+        }
+    </script>
 </body>
 </html>
