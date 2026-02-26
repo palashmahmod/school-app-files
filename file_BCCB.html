@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { 
-            --bg-gradient: linear-gradient(135deg, #455a64 0%, #263238 100%); /* মানবিক বিভাগের থিম */
+            --bg-gradient: linear-gradient(135deg, #455a64 0%, #263238 100%); 
             --white: #ffffff;
             --accent: #607d8b; 
             --success: #2e7d32; 
@@ -16,7 +16,6 @@
             --fail-bg: #ffebee;
             --no-name-bg: #eceff1;
         }
-
         * { box-sizing: border-box; }
         body { 
             font-family: 'Segoe UI', Arial, sans-serif; 
@@ -25,20 +24,15 @@
             margin: 0; padding: 0; 
             min-height: 100vh;
         }
-
-        /* স্টিকি নেভিগেশন */
         .entry-nav { 
             position: sticky; top: 0; background: var(--white); 
             padding: 12px; display: none; justify-content: space-around; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 1000;
         }
-
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-
         .header-title { text-align: center; color: var(--white); margin-bottom: 20px; }
         .header-title h2 { margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-
-        /* সাবজেক্ট লিস্ট ডিজাইন */
+        
         .subject-list { display: grid; grid-template-columns: 1fr; gap: 12px; }
         .subject-btn { 
             display: flex; justify-content: space-between; align-items: center;
@@ -48,31 +42,24 @@
             color: #333; border-left: 6px solid var(--accent);
         }
         .subject-btn:hover { transform: translateX(10px); background: #f5f7f8; }
-
-        /* এন্ট্রি সেকশন */
+        
         #entrySection { display: none; margin-top: 10px; }
         .entry-card { 
             background: var(--white); border-radius: 15px; 
             padding: 15px; overflow-x: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
-
         table { width: 100%; border-collapse: collapse; }
         th { background: #f8f9fa; padding: 12px 8px; font-size: 13px; border: 1px solid #dee2e6; color: #555; }
         td { border: 1px solid #eee; padding: 8px; text-align: center; }
-
         input[type="number"] { 
             width: 50px; padding: 8px 4px; border: 2px solid #ddd; 
             border-radius: 6px; text-align: center; font-weight: bold; outline: none;
         }
-
-        /* কালার কোডিং */
         .box-pass { background-color: var(--pass-bg) !important; border-color: var(--success) !important; color: #1b5e20; }
         .box-fail { background-color: var(--fail-bg) !important; border-color: var(--danger) !important; color: var(--danger); }
         .box-no-name { background-color: var(--no-name-bg) !important; color: #999 !important; border-color: #cfd8dc !important; cursor: not-allowed; }
-
         .total-box { font-weight: 800; color: #455a64; font-size: 15px; }
-
-        /* বাটন স্টাইল */
+        
         .btn { 
             padding: 10px 20px; border: none; border-radius: 8px; 
             color: white; font-weight: bold; cursor: pointer; 
@@ -82,27 +69,22 @@
         .btn-save { background: var(--success); }
         .btn-clear { background: var(--danger); }
         .btn-back { background: #37474f; }
-        .btn-home { background: #546e7a; margin-top: 15px; width: 100%; justify-content: center; text-decoration: none; }
-
+        .btn-home { background: #546e7a; margin-top: 15px; width: 100%; justify-content: center; text-decoration: none; cursor: pointer; }
         .footer-text { text-align: center; font-size: 11px; color: #cfd8dc; margin: 30px 0; letter-spacing: 1px; }
-
     </style>
 </head>
-
 <body onload="init()">
-
 <div class="container" id="listSection">
     <div class="header-title"><h2><i class="fas fa-users"></i> মানবিক বিভাগ নম্বর এন্ট্রি (BCCB)</h2></div>
     <div class="subject-list" id="subButtons"></div>
-
     <div style="margin-top:25px;">
         <button class="btn btn-clear" style="width: 100%; justify-content: center;" onclick="clearAllSystem()">
             <i class="fas fa-trash-alt"></i> সকল তথ্য মুছে ফেলুন
         </button>
-        <a href="file_BCC.html" class="btn btn-back" style="margin-top: 12px; width: 100%; justify-content: center; text-decoration: none;">
+        <div onclick="navigateWithCacheBusting('file_BCC.html')" class="btn btn-back" style="margin-top: 12px; width: 100%; justify-content: center; text-decoration: none;">
             <i class="fas fa-arrow-left"></i> আগের পেইজে ফিরে যান
-        </a>
-        <a href="index.html" class="btn btn-home"><i class="fas fa-home"></i> হোম পেইজ</a>
+        </div>
+        <div onclick="navigateWithCacheBusting('index.html')" class="btn btn-home"><i class="fas fa-home"></i> হোম পেইজ</div>
     </div>
 </div>
 
@@ -129,7 +111,6 @@
     const KEY = "school_v3_data";
     let db = JSON.parse(localStorage.getItem(KEY)) || { s: {} };
     let currentSubKey = ""; 
-
     let subjects = [
         { name: "বাংলা ১ম", key: "hum_b1", parts: { cq: [70, 23], mcq: [30, 10] } },
         { name: "বাংলা ২য়", key: "hum_b2", parts: { cq: [70, 23], mcq: [30, 10] } },
@@ -144,6 +125,11 @@
         { name: "গার্হস্থ্য", key: "hum_hm", parts: { cq: [50, 17], mcq: [25, 8], prac: [25, 8] } },
         { name: "তথ্য প্রযুক্তি", key: "hum_ict", parts: { mcq: [25, 8], prac: [25, 8] } }
     ];
+
+    function navigateWithCacheBusting(page) {
+        const timestamp = new Date().getTime();
+        window.location.href = page + "?v=" + timestamp;
+    }
 
     function init() {
         let html = "";
@@ -178,7 +164,7 @@
         if(s.parts.total) header += `<th>নম্বর</th>`;
         header += `<th>মোট</th>`;
         document.getElementById('tableHeader').innerHTML = header;
-
+        
         let body = "";
         if(!db[currentSubKey]) db[currentSubKey] = {};
         
@@ -187,13 +173,13 @@
             if(db.s && db.s[r] && db.s[r].trim() !== "") { lastRoll = r; break; }
         }
         if(lastRoll === 0) lastRoll = 10;
-
+        
         for(let i=1; i<=lastRoll; i++) {
             let hasName = (db.s && db.s[i] && db.s[i].trim() !== "");
             let d = db[currentSubKey][i] || {cq:"", mcq:"", prac:"", total:""};
             let rowClass = hasName ? "" : "box-no-name";
             let readOnly = hasName ? "" : "readonly";
-
+            
             body += `<tr class="${rowClass}"><td>${toB(i)}</td>`;
             if(s.parts.cq) body += `<td><input type="number" id="cq_${i}" value="${hasName?d.cq:0}" ${readOnly} oninput="calc(${i})" class="${hasName?checkColor(d.cq, s.parts.cq):'box-no-name'}"></td>`;
             if(s.parts.mcq) body += `<td><input type="number" id="mcq_${i}" value="${hasName?d.mcq:0}" ${readOnly} oninput="calc(${i})" class="${hasName?checkColor(d.mcq, s.parts.mcq):'box-no-name'}"></td>`;
