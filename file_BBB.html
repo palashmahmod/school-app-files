@@ -15,7 +15,6 @@
             --success: #27ae60;
             --danger: #e74c3c;
         }
-        
         body { 
             font-family: 'Segoe UI', Roboto, sans-serif; 
             background: var(--bg-gradient); 
@@ -24,7 +23,6 @@
             padding: 0; 
             color: var(--text-dark);
         }
-
         /* স্টিকি টপ নেভিগেশন */
         .entry-nav { 
             position: sticky; top: 0; background: rgba(255, 255, 255, 0.95); 
@@ -32,13 +30,10 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 1000;
             backdrop-filter: blur(10px);
         }
-
         .container { max-width: 600px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
-
         .header-title { text-align: center; margin-bottom: 25px; color: var(--white); }
         .header-title h2, .header-title h3 { margin: 0; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); font-weight: 800; }
-
-        /* বিষয় তালিকা কার্ড */
+        
         .subject-list { display: grid; grid-template-columns: 1fr; gap: 12px; }
         .subject-btn { 
             display: flex; justify-content: space-between; padding: 18px 22px; 
@@ -50,52 +45,45 @@
         .subject-btn:active { transform: translate(3px, 3px); box-shadow: 2px 2px 5px rgba(0,0,0,0.2); }
         .subject-btn i { color: var(--primary-purple); font-size: 18px; }
 
-        /* এন্ট্রি কার্ড ও টেবিল */
         #entrySection { display: none; margin-top: 10px; animation: slideUp 0.3s ease; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
+        
         .entry-card { 
             background: var(--white); border-radius: 20px; padding: 10px; 
             overflow-x: auto; box-shadow: 10px 10px 25px rgba(0,0,0,0.4);
         }
-
         table { width: 100%; border-collapse: collapse; min-width: 300px; }
         th { background: #f8f9fa; padding: 12px 8px; font-size: 12px; border-bottom: 2px solid #eee; color: #666; }
         td { padding: 8px 5px; text-align: center; border-bottom: 1px solid #f0f0f0; }
-
+        
         input[type="number"] { 
             width: 55px; padding: 10px 2px; border: 1.5px solid #dde1e5; border-radius: 8px; 
             text-align: center; font-weight: bold; font-size: 15px; outline: none; transition: 0.3s;
         }
         input:focus { border-color: var(--primary-purple); background: #fbf9ff; }
-
-        /* নাম না থাকলে নীল ব্যাকগ্রাউন্ড */
         .box-no-name { background-color: var(--no-name-bg) !important; opacity: 0.7; }
         .total-box { font-weight: 800; color: #000; background: #eee; padding: 8px; border-radius: 8px; min-width: 35px; display: inline-block; }
-
-        /* বাটন স্টাইল */
+        
         .btn { padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; }
         .btn:active { transform: scale(0.95); }
         .btn-save { background: var(--success); box-shadow: 0 4px 0 #1e8449; }
         .btn-clear { background: var(--danger); box-shadow: 0 4px 0 #b71c1c; width: 100%; justify-content: center; }
-        .btn-back { background: var(--text-dark); box-shadow: 0 4px 0 #000; }
+        .btn-back { background: var(--text-dark); box-shadow: 0 4px 0 #000; cursor: pointer;}
         
         .action-area { margin-top: 30px; display: flex; flex-direction: column; gap: 15px; }
-
         .footer-text { text-align: center; font-size: 10px; color: rgba(255,255,255,0.5); padding: 40px 0; letter-spacing: 2px; }
-
     </style>
 </head>
-
 <body onload="init()">
 
 <div class="container" id="listSection">
     <div class="header-title"><h2><i class="fas fa-file-signature"></i> নম্বর এন্ট্রি (BBB)</h2></div>
     <div class="subject-list" id="subButtons"></div>
-
     <div class="action-area">
         <button class="btn btn-clear" onclick="clearAllSystem()"><i class="fas fa-trash-alt"></i> সকল নম্বর মুছে ফেলুন</button>
-        <a href="file_BB.html" class="btn btn-back" style="text-decoration: none; justify-content: center;"><i class="fas fa-arrow-left"></i> আগের পেইজে ফিরে যান</a>
+        <div onclick="navigateWithCacheBusting('file_BB.html')" class="btn btn-back" style="justify-content: center;">
+            <i class="fas fa-arrow-left"></i> আগের পেইজে ফিরে যান
+        </div>
     </div>
 </div>
 
@@ -112,7 +100,8 @@
             <tbody id="tableBody"></tbody>
         </table>
     </div>
-    <div style="height: 50px;"></div> </div>
+    <div style="height: 50px;"></div> 
+</div>
 
 <div class="footer-text">POWERED BY PALASH MAHMOD</div>
 
@@ -120,7 +109,6 @@
     const KEY = "school_v3_data";
     let db = JSON.parse(localStorage.getItem(KEY)) || { s: {} };
     let currentSubKey = ""; 
-
     let subjects = [
         { name: "বাংলা ১ম", key: "j_b1", parts: { cq: 70, mcq: 30 } },
         { name: "বাংলা ২য়", key: "j_b2", parts: { cq: 35, mcq: 15 } },
@@ -132,6 +120,11 @@
         { name: "ধর্ম", key: "j_rel", parts: { cq: 70, mcq: 30 } },
         { name: "তথ্য প্রযুক্তি", key: "j_ict", parts: { cq: 25, prac: 25 } }
     ];
+
+    function navigateWithCacheBusting(page) {
+        const timestamp = new Date().getTime();
+        window.location.href = page + "?v=" + timestamp;
+    }
 
     function init() {
         let html = "";
@@ -169,6 +162,8 @@
 
         let body = "";
         if(!db[currentSubKey]) db[currentSubKey] = {};
+
+        // শেষ রোল খুঁজে বের করা
         let lastRoll = 0;
         for(let r=150; r>=1; r--) {
             if(db.s && db.s[r] && db.s[r].trim() !== "") { lastRoll = r; break; }
@@ -219,18 +214,25 @@
             }
         }
         localStorage.setItem(KEY, JSON.stringify(db));
-        alert("সফলভাবে তথ্য সংরক্ষিত হয়েছে!");
+        alert("সফলভাবে তথ্য সংরক্ষিত হয়েছে!");
+        
+        // বর্তমান পেজ রিফ্রেশ (ক্যাশ বাস্টিং সহ)
+        const currentPage = window.location.pathname.split('/').pop();
+        navigateWithCacheBusting(currentPage);
     }
 
     function clearAllSystem() {
         if(confirm("এই বিভাগের সকল নম্বর মুছে যাবে! আপনি কি নিশ্চিত?")) {
             subjects.forEach(s => db[s.key] = {});
             localStorage.setItem(KEY, JSON.stringify(db));
-            alert("সব তথ্য মুছে ফেলা হয়েছে।");
+            alert("সব তথ্য মুছে ফেলা হয়েছে।");
             location.reload();
         }
     }
-    function toB(n) { return n.toString().padStart(2, '0').split('').map(x => ['০','১','২','৩','৪','৫','৬','৭','৮','৯'][x]).join(''); }
+
+    function toB(n) { 
+        return n.toString().padStart(2, '0').split('').map(x => ['০','১','২','৩','৪','৫','৬','৭','৮','৯'][x]).join(''); 
+    }
 </script>
 </body>
 </html>
