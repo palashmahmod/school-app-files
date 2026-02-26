@@ -7,12 +7,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { 
-            --bg-gradient: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); /* ব্যবসায় শিক্ষার জন্য সবুজ থিম */
+            --bg-gradient: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); /* ব্যবসায় শিক্ষার জন্য সবুজ থিম */
             --white: #ffffff;
             --accent: #28a745; 
             --dark: #333;
         }
-
         * { box-sizing: border-box; }
         body { 
             font-family: 'Segoe UI', Tahoma, sans-serif; 
@@ -22,7 +21,6 @@
             display: flex; align-items: center; justify-content: center;
             min-height: 100vh;
         }
-
         .container { 
             width: 100%;
             max-width: 500px; 
@@ -31,7 +29,6 @@
             border-radius: 20px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
-
         .header { text-align: center; margin-bottom: 25px; }
         .header h1 { 
             font-size: 20px; 
@@ -41,7 +38,6 @@
             border-bottom: 3px solid var(--accent);
             display: inline-block;
         }
-        
         .section-title { 
             font-weight: bold; 
             margin-bottom: 15px; 
@@ -53,10 +49,7 @@
             color: #555;
             border-left: 5px solid var(--accent);
         }
-        
         .section-card { margin-bottom: 25px; }
-
-        /* নির্ধারিত অপশনাল বক্স */
         .auto-box { 
             background: #e8f5e9; 
             border: 2px dashed var(--accent); 
@@ -67,8 +60,6 @@
         }
         .auto-box h3 { margin: 5px 0; color: #1b5e20; font-size: 20px; }
         .info-text { font-size: 11px; color: #666; font-style: italic; }
-
-        /* সিলেকশন কার্ড স্টাইল */
         .option-card { 
             display: flex; 
             align-items: center; 
@@ -80,21 +71,17 @@
             cursor: pointer; 
             transition: all 0.3s ease;
         }
-
         .option-card:has(input:checked) {
             border-color: var(--accent);
             background-color: #f1f8f1;
             box-shadow: 0 4px 10px rgba(40, 167, 69, 0.1);
         }
-
         .option-card:hover { border-color: var(--accent); background: #fafafa; }
-        
         .option-card input { 
             width: 20px;
             height: 20px;
             accent-color: var(--accent);
         }
-        
         .option-card label { 
             cursor: pointer; 
             font-weight: 600; 
@@ -102,7 +89,6 @@
             color: var(--dark);
             font-size: 14px;
         }
-
         .btn-save { 
             width: 100%; 
             padding: 15px; 
@@ -120,12 +106,10 @@
             justify-content: center;
             gap: 10px;
         }
-
         .btn-save:active { 
             transform: translateY(3px); 
             box-shadow: none; 
         }
-
         .back-link { 
             display: block; 
             text-align: center; 
@@ -134,8 +118,8 @@
             color: #d93025; 
             font-weight: bold; 
             font-size: 14px;
+            cursor: pointer;
         }
-
         .footer-text { 
             text-align: center; 
             font-size: 10px; 
@@ -145,13 +129,13 @@
         }
     </style>
 </head>
-
 <body>
+
 <div class="container">
     <div class="header">
         <h1><i class="fas fa-briefcase"></i> ব্যবসায় শিক্ষা লজিক (BCBA)</h1>
     </div>
-
+    
     <div class="section-card">
         <span class="section-title"><i class="fas fa-thumbtack"></i> ১. নির্ধারিত অপশনাল বিষয়:</span>
         <div class="auto-box">
@@ -160,7 +144,7 @@
             <p class="info-text">*রেজাল্ট শিটে এটি স্বয়ংক্রিয়ভাবে ৪র্থ বিষয় হিসেবে গণ্য হবে।</p>
         </div>
     </div>
-
+    
     <div class="section-card">
         <span class="section-title"><i class="fas fa-calculator"></i> ২. GPA পদ্ধতি সিলেকশন:</span>
         
@@ -168,25 +152,31 @@
             <input type="radio" name="gpaLogic" id="logic1" value="ssc_logic">
             <label for="logic1">SSC পরীক্ষার GPA লজিক (F1, F2 সহ)</label>
         </div>
-
+        
         <div class="option-card" onclick="document.getElementById('logic2').checked=true">
             <input type="radio" name="gpaLogic" id="logic2" value="no_logic">
             <label for="logic2">GPA লজিক ছাড়া (শুধুমাত্র F1, F2 লজিক)</label>
         </div>
     </div>
-
+    
     <button class="btn-save" onclick="saveBCBASettings()">
         <i class="fas fa-save"></i> সেটিংস সেভ করুন
     </button>
-
-    <a href="file_BCB.html" class="back-link">
+    
+    <div onclick="navigateWithCacheBusting('file_BCB.html')" class="back-link">
         <i class="fas fa-chevron-left"></i> আগের পেইজে ফিরে যান
-    </a>
-
+    </div>
+    
     <div class="footer-text">POWERED BY PALASH MAHMOD</div>
 </div>
 
 <script>
+    // Cache Busting Navigation
+    function navigateWithCacheBusting(page) {
+        const timestamp = new Date().getTime();
+        window.location.href = page + "?v=" + timestamp;
+    }
+
     window.onload = function() {
         const savedLogic = localStorage.getItem('bcba_gpa_logic');
         if(savedLogic) {
@@ -197,13 +187,11 @@
 
     function saveBCBASettings() {
         const logic = document.querySelector('input[name="gpaLogic"]:checked');
-
         if(!logic) {
             alert("দয়া করে GPA পদ্ধতি সিলেক্ট করুন!");
             return;
         }
-
-        // ডাটা সেভ
+        
         localStorage.setItem('bcba_optional', 'home_science');
         localStorage.setItem('bcba_gpa_logic', logic.value);
         
