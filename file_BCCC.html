@@ -11,7 +11,6 @@
             --white: #ffffff;
             --primary: #d32f2f; 
         }
-
         * { box-sizing: border-box; }
         body { 
             font-family: 'Segoe UI', Tahoma, sans-serif; 
@@ -20,11 +19,9 @@
             margin: 0; padding: 10px; 
             min-height: 100vh;
         }
-
         .header-title { text-align: center; color: var(--white); margin-bottom: 15px; }
         .header-title h2 { margin: 0; font-size: 20px; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
-
-        /* আগের সেই সুন্দর টেবিল কন্টেইনার */
+        
         .table-wrapper { 
             background: #fff; 
             border-radius: 12px;
@@ -33,9 +30,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             border: 2px solid #333;
         }
-
         table { border-collapse: separate; border-spacing: 0; width: max-content; }
-
         th, td { 
             border: 1px solid #ccc; 
             padding: 8px 10px; 
@@ -43,16 +38,12 @@
             font-size: 13px; 
             white-space: nowrap; 
         }
-
-        /* হেডার ফ্রিজ */
         th { 
             background: #f1f3f4; 
             position: sticky; top: 0; z-index: 100; 
             color: #333; font-weight: bold;
             border-bottom: 2px solid #333;
         }
-
-        /* শুধু রোল ফ্রিজ (আপনার আগের ডিজাইন অনুযায়ী) */
         th:nth-child(1), td:nth-child(1) { 
             position: sticky; 
             left: 0; 
@@ -60,17 +51,13 @@
             z-index: 50; 
             border-right: 2px solid #333; 
         }
-
         th:nth-child(1) { z-index: 110; }
-
         .f-count { color: #d32f2f !important; font-weight: bold; background: #fff1f0 !important; }
-
-        /* বাটন সেকশন - আগের স্টাইল */
+        
         .btn-container { 
             max-width: 900px; margin: 20px auto; 
             display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
         }
-
         .btn { 
             padding: 10px 18px; border: none; border-radius: 8px; 
             font-weight: bold; cursor: pointer; color: #fff; 
@@ -79,12 +66,10 @@
             box-shadow: 0 4px 0px rgba(0,0,0,0.2);
         }
         .btn:active { transform: translateY(3px); box-shadow: none; }
-
         .btn-excel { background: #0F9D58; box-shadow: 0 4px 0px #096d3d; }
         .btn-copy { background: #28a745; box-shadow: 0 4px 0px #1e7e34; }
         .btn-home { background: #1a73e8; box-shadow: 0 4px 0px #0d47a1; }
         .btn-back { background: #333; box-shadow: 0 4px 0px #000; }
-
     </style>
 </head>
 <body onload="initBCCC()">
@@ -105,21 +90,26 @@
         <i class="fas fa-file-excel"></i> গুগল শিটে পাঠান
     </button>
     
-    <a href="index.html" class="btn btn-home">
+    <div onclick="navigateWithCacheBusting('index.html')" class="btn btn-home">
         <i class="fas fa-home"></i> হোম মেনু
-    </a>
+    </div>
 
     <button class="btn btn-copy" onclick="copyData()">
         <i class="fas fa-copy"></i> তথ্য কপি করুন
     </button>
 
-    <a href="file_BCC.html" class="btn btn-back">
+    <div onclick="navigateWithCacheBusting('file_BCC.html')" class="btn btn-back">
         <i class="fas fa-arrow-left"></i> আগের পেজ
-    </a>
+    </div>
 </div>
 
 <script>
-    // জাভাস্ক্রিপ্ট এবং ডাটা লজিক আগের মতোই থাকছে
+    // Cache Busting Navigation
+    function navigateWithCacheBusting(page) {
+        const timestamp = new Date().getTime();
+        window.location.href = page + "?v=" + timestamp;
+    }
+
     const colNames = ["রোল", "শিক্ষার্থীর নাম", "বাঃ ১ম CQ", "বাঃ ১ম MCQ", "বাঃ ১ম মোট", "বাঃ ২য় CQ", "বাঃ ২য় MCQ", "বাঃ ২য় মোট", "বাংলা গ্রেড", "ইং ১ম", "ইং ২য়", "ইং গ্রেড", "গণিত CQ", "গণিত MCQ", "গণিত মোট", "গণিত গ্রেড", "ধর্ম CQ", "ধর্ম MCQ", "ধর্ম মোট", "ধর্ম গ্রেড", "বিজ্ঞান CQ", "বিজ্ঞান MCQ", "বিজ্ঞান মোট", "বিজ্ঞান গ্রেড", "ইতিহাস CQ", "ইতিহাস MCQ", "ফাঁকা", "ইতিহাস মোট", "ইতিহাস গ্রেড", "ভূগোল CQ", "ভূগোল MCQ", "ফাঁকা", "ভূগোল মোট", "ভূগোল গ্রেড", "পৌরনীতি CQ", "পৌরনীতি MCQ", "ফাঁকা", "পৌরনীতি মোট", "পৌরনীতি গ্রেড", "তথ্য MCQ", "তথ্য PR", "তথ্য মোট", "তথ্য গ্রেড", "গার্হস্থ্য CQ", "গার্হস্থ্য MCQ", "গার্হস্থ্য PR", "গার্হস্থ্য মোট", "গার্হস্থ্য গ্রেড", "মোট প্রাপ্ত নম্বর", "GPA", "মেধাস্থান", "মেধানুসারে রোল", "উপবৃত্তি", "রেজি নং", "জন্মতারিখ", "ফাঁকা", "অন্যান্য"];
 
     function toB(n) { return n.toString().split('').map(x => ['০','১','২','৩','৪','৫','৬','৭','৮','৯'][x] || x).join(''); }
@@ -190,7 +180,7 @@
             row[48]=hmG.g;
 
             row[49] = row[5] + row[8] + row[10] + row[11] + row[15] + row[19] + row[23] + row[28] + row[33] + row[38] + row[42] + row[47];
-
+            
             let mainSubs = [bG, eG, mG, rG, sG, hisG, geoG, civG, icG];
             let optSub = hmG;
             let failCount = mainSubs.filter(x => x.g === "F").length;
@@ -207,8 +197,10 @@
                     row[50] = finalGPA.toFixed(2);
                 }
             }
+
             row[53] = db.stipend?.[r] || ""; row[54] = db.reg?.[r] || ""; 
             row[55] = db.dob?.[r] || ""; row[56] = ""; row[57] = db.other?.[r] || "";
+
             resultData.push({ r, data: row, fCount: failCount, total: row[49] });
         }
 
@@ -236,7 +228,6 @@
         alert("মানবিক বিভাগের তথ্য কপি হয়েছে!");
     }
 
-    // আপনার দেওয়া সেই নির্দিষ্ট সতর্কতা মেসেজ
     function confirmAndSend() {
         const scriptURL = localStorage.getItem('active_sheet_url');
         const sheetTabName = localStorage.getItem('active_tab_name');
@@ -245,13 +236,10 @@
             alert("সতর্কতা: সঠিক শিট বা ট্যাব খুঁজে পাওয়া যায়নি। অনুগ্রহ করে কন্ট্রোল প্যানেল থেকে পুনরায় নির্বাচন করুন।");
             return;
         }
-
         const rows = document.querySelectorAll('#tableBody tr');
         if (rows.length === 0) return alert("টেবিলে কোনো ডাটা নেই!");
-
-        // আপনার দেওয়া মেসেজ হুবহু রাখা হয়েছে
-        const confirmMsg = `সতর্কতা: শিটে (${sheetTabName}) থাকা পূর্বের সকল ডাটা মুছে যাবে!\n\nআপনি কি নিশ্চিতভাবে আপলোড করতে চান?`;
         
+        const confirmMsg = `সতর্কতা: শিটে (${sheetTabName}) থাকা পূর্বের সকল ডাটা মুছে যাবে!\n\nআপনি কি নিশ্চিতভাবে আপলোড করতে চান?`;
         if (confirm(confirmMsg)) {
             sendToGoogleSheet(scriptURL, sheetTabName, rows);
         }
@@ -262,10 +250,8 @@
         const originalText = btn.innerHTML;
         btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> পাঠানো হচ্ছে...";
         btn.disabled = true;
-
         let allData = [];
         rows.forEach(tr => allData.push(Array.from(tr.querySelectorAll('td')).map(td => td.innerText)));
-
         try {
             await fetch(url, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ sheetName: tab, data: allData }) });
             alert("সফলভাবে মানবিক বিভাগের ডাটা " + tab + " ট্যাবে আপলোড করা হয়েছে!");
