@@ -39,7 +39,6 @@
             padding-bottom: 15px;
         }
         .header h2 { font-size: 20px; color: var(--primary-blue); margin: 0; font-weight: 800; }
-
         .entry-group { display: flex; flex-direction: column; gap: 15px; }
         .input-box { display: flex; flex-direction: column; gap: 6px; }
         
@@ -55,43 +54,38 @@
             transition: 0.3s;
         }
         input:focus { border-color: var(--primary-blue); background: #fff; box-shadow: 0 0 8px rgba(26, 115, 232, 0.1); }
-
         .dynamic-section { margin-top: 20px; border-top: 1px dashed #ccc; padding-top: 20px; }
         .extra-field { display: flex; gap: 10px; margin-bottom: 15px; align-items: flex-end; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         .btn-remove { 
             background: #fff; color: var(--danger); border: 1.5px solid var(--danger); 
             width: 45px; height: 45px; border-radius: 12px; cursor: pointer; transition: 0.2s;
         }
         .btn-remove:hover { background: var(--danger); color: #fff; }
-
         .create-area { 
             background: #f0f4f8; padding: 15px; border-radius: 15px; 
             margin-top: 20px; display: flex; flex-direction: column; gap: 10px; 
             border: 1px solid #d1d9e6;
         }
-
         .btn-action { 
             width: 100%; padding: 14px; border: none; border-radius: 12px; 
             font-size: 16px; font-weight: bold; cursor: pointer; color: #fff; 
             display: flex; align-items: center; justify-content: center; 
             gap: 10px; margin-top: 15px; transition: 0.2s;
             box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+            text-decoration: none;
         }
         .btn-action:active { transform: translate(2px, 2px); box-shadow: none; }
         .btn-save { background: var(--success); box-shadow: 4px 4px 0px #1e8449; }
-        .btn-back { background: var(--text-dark); box-shadow: 4px 4px 0px #111; text-decoration: none; }
+        .btn-back { background: var(--text-dark); box-shadow: 4px 4px 0px #111; }
         .footer-text { text-align: center; font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 30px; letter-spacing: 1px; }
     </style>
 </head>
 <body>
-
 <div class="container">
     <div class="header">
         <h2><i class="fas fa-edit"></i> অন্যান্য তথ্য এন্ট্রি (CA)</h2>
     </div>
-
     <div id="fixedFields" class="entry-group">
         <div class="input-box"><label>পরীক্ষার ধরণ ও সাল</label><input type="text" id="val_1" placeholder="উদা: বার্ষিক পরীক্ষা ২০২৪"></div>
         <div class="input-box"><label>শ্রেণি</label><input type="text" id="val_2" placeholder="উদা: ১০ম"></div>
@@ -103,9 +97,7 @@
         <div class="input-box"><label>অনুপস্থিত শিক্ষার্থী</label><input type="text" id="val_8"></div>
         <div class="input-box"><label>পাশের হার</label><input type="text" id="val_9"></div>
     </div>
-
     <div id="dynamicContainer" class="dynamic-section"></div>
-
     <div class="create-area">
         <label><i class="fas fa-plus-circle"></i> নতুন বক্স তৈরি করুন</label>
         <div style="display: flex; gap: 8px;">
@@ -113,18 +105,14 @@
             <button onclick="createField()" style="background: var(--primary-blue); color: white; border: none; padding: 0 15px; border-radius: 10px; cursor: pointer; font-weight: bold;">তৈরি</button>
         </div>
     </div>
-
     <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
-
     <button class="btn-action btn-save" onclick="saveCAData()">
         <i class="fas fa-save"></i> সকল তথ্য সংরক্ষণ করুন
     </button>
-
-    <div onclick="navigateWithCacheBusting('C.html')" class="btn-action btn-back">
+    <div onclick="navigateWithCacheBusting('file_C.html')" class="btn-action btn-back">
         <i class="fas fa-arrow-left"></i> ফিরে যান
     </div>
 </div>
-
 <div class="footer-text">POWERED BY PALASH MAHMOD</div>
 
 <script>
@@ -149,7 +137,6 @@
     function createField(name = "", value = "", isLoad = false) {
         const fieldName = isLoad ? name : document.getElementById('newFieldName').value;
         if(!fieldName) return;
-
         const container = document.getElementById('dynamicContainer');
         const div = document.createElement('div');
         div.className = 'extra-field';
@@ -169,7 +156,6 @@
         for(let i=1; i<=9; i++) {
             db.other[i] = document.getElementById(`val_${i}`).value;
         }
-
         let extraArr = [];
         document.querySelectorAll('.dyn-input').forEach((el, index) => {
             let id = index + 10;
