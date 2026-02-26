@@ -12,7 +12,6 @@
             --accent-green: #28a745; 
             --dark: #2c3e50;
         }
-
         * { box-sizing: border-box; }
         
         body { 
@@ -26,7 +25,6 @@
             justify-content: center;
             min-height: 100vh;
         }
-
         .container { 
             width: 90%; 
             max-width: 450px; 
@@ -37,7 +35,6 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
-
         .header { text-align: center; margin-bottom: 35px; color: var(--white); }
         .header h1 { 
             font-size: 22px; 
@@ -46,9 +43,7 @@
             font-weight: 800;
         }
         .header p { font-size: 14px; opacity: 0.8; margin-top: 5px; }
-
         .grid-container { display: grid; grid-template-columns: 1fr; gap: 18px; }
-
         .menu-card { 
             display: flex; 
             padding: 20px; 
@@ -62,11 +57,10 @@
             transition: 0.2s; 
             box-shadow: 0 6px 0px #cfd8dc;
             border: 1px solid #eee;
+            cursor: pointer;
         }
-
         .menu-card:hover { transform: translateY(-2px); }
         .menu-card:active { transform: translateY(4px); box-shadow: none; background: #f0f0f0; }
-
         .menu-card i { 
             font-size: 24px; 
             color: var(--accent-green); 
@@ -78,9 +72,7 @@
             justify-content: center;
             border-radius: 10px;
         }
-
         .menu-card span { font-size: 16px; }
-
         .back-link { 
             display: flex; 
             align-items: center; 
@@ -93,9 +85,9 @@
             font-size: 14px;
             opacity: 0.9;
             transition: 0.3s;
+            cursor: pointer;
         }
         .back-link:hover { opacity: 1; text-decoration: underline; }
-
         .footer-text { 
             text-align: center; 
             font-size: 10px; 
@@ -107,34 +99,37 @@
     </style>
 </head>
 <body>
-
     <div class="container">
         <div class="header">
             <h1><i class="fas fa-briefcase"></i> ব্যবসায় বিভাগ</h1>
             <p>৯ম-১০ম শ্রেণি (BCB)</p>
         </div>
-
         <div class="grid-container">
-            <a href="file_BCBA.html" class="menu-card">
+            <div onclick="navigateWithCacheBusting('file_BCBA.html')" class="menu-card">
                 <i class="fas fa-sliders"></i>
                 <span>১. লজিক নির্ধারণ (BCBA)</span>
-            </a>
-
-            <a href="file_BCBB.html" class="menu-card">
+            </div>
+            <div onclick="navigateWithCacheBusting('file_BCBB.html')" class="menu-card">
                 <i class="fas fa-edit"></i>
                 <span>২. বিষয়ে নম্বর এন্ট্রি (BCBB)</span>
-            </a>
-
-            <a href="file_BCBC.html" class="menu-card">
+            </div>
+            <div onclick="navigateWithCacheBusting('file_BCBC.html')" class="menu-card">
                 <i class="fas fa-table-list"></i>
                 <span>৩. ফলাফল বিবরণী (BCBC)</span>
-            </a>
+            </div>
         </div>
-
-        <a href="file_B.html" class="back-link"><i class="fas fa-chevron-left"></i> আগের পেইজে ফিরে যান</a>
+        <div onclick="navigateWithCacheBusting('file_B.html')" class="back-link">
+            <i class="fas fa-chevron-left"></i> আগের পেইজে ফিরে যান
+        </div>
         
         <div class="footer-text">POWERED BY PALASH MAHMOD</div>
     </div>
 
+    <script>
+        function navigateWithCacheBusting(page) {
+            const timestamp = new Date().getTime();
+            window.location.href = page + "?v=" + timestamp;
+        }
+    </script>
 </body>
 </html>
