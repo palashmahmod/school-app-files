@@ -11,7 +11,6 @@
             --white: #ffffff;
             --primary: #1a73e8; 
         }
-
         * { box-sizing: border-box; }
         body { 
             font-family: 'Segoe UI', Tahoma, sans-serif; 
@@ -20,11 +19,8 @@
             margin: 0; padding: 10px; 
             min-height: 100vh;
         }
-
         .header-title { text-align: center; color: var(--white); margin-bottom: 15px; }
         .header-title h2 { margin: 0; font-size: 20px; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
-
-        /* আধুনিক টেবিল কন্টেইনার */
         .table-wrapper { 
             background: #fff; 
             border-radius: 12px;
@@ -33,9 +29,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             border: 2px solid #333;
         }
-
         table { border-collapse: separate; border-spacing: 0; width: max-content; }
-
         th, td { 
             border: 1px solid #ccc; 
             padding: 8px 10px; 
@@ -43,16 +37,12 @@
             font-size: 13px; 
             white-space: nowrap; 
         }
-
-        /* হেডার ফ্রিজ */
         th { 
             background: #f1f3f4; 
             position: sticky; top: 0; z-index: 100; 
             color: #333; font-weight: bold;
             border-bottom: 2px solid #333;
         }
-
-        /* রোল নম্বর কলাম ফ্রিজ */
         th:nth-child(1), td:nth-child(1) { 
             position: sticky; 
             left: 0; 
@@ -60,17 +50,12 @@
             z-index: 50; 
             border-right: 2px solid #333; 
         }
-
         th:nth-child(1) { z-index: 110; }
-
         .f-count { color: red !important; font-weight: bold; background: #fff1f0 !important; }
-
-        /* বাটন সেকশন */
         .btn-container { 
             max-width: 900px; margin: 20px auto; 
             display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
         }
-
         .btn { 
             padding: 10px 18px; border: none; border-radius: 8px; 
             font-weight: bold; cursor: pointer; color: #fff; 
@@ -79,18 +64,16 @@
             box-shadow: 0 4px 0px rgba(0,0,0,0.2);
         }
         .btn:active { transform: translateY(3px); box-shadow: none; }
-
         .btn-excel { background: #0F9D58; box-shadow: 0 4px 0px #096d3d; }
         .btn-home { background: #1a73e8; box-shadow: 0 4px 0px #0d47a1; }
         .btn-copy { background: #28a745; box-shadow: 0 4px 0px #1e7e34; }
         .btn-back { background: #333; box-shadow: 0 4px 0px #000; }
-
     </style>
 </head>
 <body onload="initBCAC()">
 
 <div class="header-title">
-    <h2>বিজ্ঞান বিভাগ ফলাফল বিবরণী (BCAC)</h2>
+    <h2><i class="fas fa-file-invoice"></i> বিজ্ঞান বিভাগ ফলাফল বিবরণী (BCAC)</h2>
 </div>
 
 <div class="table-wrapper">
@@ -104,21 +87,23 @@
     <button id="sheetBtn" class="btn btn-excel" onclick="confirmAndSend()">
         <i class="fas fa-file-excel"></i> গুগল শিটে পাঠান
     </button>
-    
-    <a href="index.html" class="btn btn-home"><i class="fas fa-home"></i> হোম মেনু</a>
-    
+    <div onclick="navigateWithCacheBusting('index.html')" class="btn btn-home" style="cursor: pointer;"><i class="fas fa-home"></i> হোম মেনু</div>
     <button class="btn btn-copy" onclick="copyData()"><i class="fas fa-copy"></i> তথ্য কপি করুন</button>
-    
-    <a href="file_BCA.html" class="btn btn-back"><i class="fas fa-arrow-left"></i> আগের পেজ</a>
+    <div onclick="navigateWithCacheBusting('file_BCA.html')" class="btn btn-back" style="cursor: pointer;"><i class="fas fa-arrow-left"></i> আগের পেজ</div>
 </div>
 
 <script>
-    // আপনার দেওয়া colNames এবং ফাংশনগুলো হুবহু রাখা হয়েছে
-    const colNames = ["রোল", "শিক্ষার্থীর নাম", "বাঃ ১ম CQ", "বাঃ ১ম MCQ", "বাঃ ১ম মোট", "বাঃ ২য় CQ", "বাঃ ২য় MCQ", "বাঃ ২য় মোট", "বাংলা গ্রেড", "ইং ১ম", "ইং ২য়", "ইং গ্রেড", "গণিত CQ", "গণিত MCQ", "গণিত মোট", "গণিত গ্রেড", "ধর্ম CQ", "ধর্ম MCQ", "ধর্ম মোট", "ধর্ম গ্রেড", "বাঃ ও বিঃ CQ", "বাঃ ও বিঃ MCQ", "বাঃ ও বিঃ মোট", "বাঃ ও বিঃ গ্রেড", "পদার্থ CQ", "পদার্থ MCQ", "পদার্থ PR", "পদার্থ মোট", "পদার্থ গ্রেড", "রসায়ন CQ", "রসায়ন MCQ", "রসায়ন PR", "রসায়ন মোট", "রসায়ন গ্রেড", "জীববিজ্ঞান CQ", "জীববিজ্ঞান MCQ", "জীববিজ্ঞান PR", "জীববিজ্ঞান মোট", "জীববিজ্ঞান গ্রেড", "তথ্য MCQ", "তথ্য PR", "তথ্য মোট", "তথ্য গ্রেড", "উঃগণিত CQ", "উঃগণিত MCQ", "উঃগণিত PR", "উঃগণিত মোট", "উঃগণিত গ্রেড", "মোট প্রাপ্ত নম্বর", "GPA", "মেধাস্থান", "মেধানুসারে রোল", "উপবৃত্তি", "রেজি নং", "জন্মতারিখ", "ফাঁকা", "অন্যান্য"];
+    // Cache Busting Navigation
+    function navigateWithCacheBusting(page) {
+        const timestamp = new Date().getTime();
+        window.location.href = page + "?v=" + timestamp;
+    }
 
+    const colNames = ["রোল", "শিক্ষার্থীর নাম", "বাঃ ১ম CQ", "বাঃ ১ম MCQ", "বাঃ ১ম মোট", "বাঃ ২য় CQ", "বাঃ ২য় MCQ", "বাঃ ২য় মোট", "বাংলা গ্রেড", "ইং ১ম", "ইং ২য়", "ইং গ্রেড", "গণিত CQ", "গণিত MCQ", "গণিত মোট", "গণিত গ্রেড", "ধর্ম CQ", "ধর্ম MCQ", "ধর্ম মোট", "ধর্ম গ্রেড", "বাঃ ও বিঃ CQ", "বাঃ ও বিঃ MCQ", "বাঃ ও বিঃ মোট", "বাঃ ও বিঃ গ্রেড", "পদার্থ CQ", "পদার্থ MCQ", "পদার্থ PR", "পদার্থ মোট", "পদার্থ গ্রেড", "রসায়ন CQ", "রসায়ন MCQ", "রসায়ন PR", "রসায়ন মোট", "রসায়ন গ্রেড", "জীববিজ্ঞান CQ", "জীববিজ্ঞান MCQ", "জীববিজ্ঞান PR", "জীববিজ্ঞান মোট", "জীববিজ্ঞান গ্রেড", "তথ্য MCQ", "তথ্য PR", "তথ্য মোট", "তথ্য গ্রেড", "উঃগণিত CQ", "উঃগণিত MCQ", "উঃগণিত PR", "উঃগণিত মোট", "উঃগণিত গ্রেড", "মোট প্রাপ্ত নম্বর", "GPA", "মেধাস্থান", "মেধানুসারে রোল", "উপবৃত্তি", "রেজি নং", "জন্মতারিখ", "ফাঁকা", "অন্যান্য"];
+    
     function toB(n) { return n.toString().split('').map(x => ['০','১','২','৩','৪','৫','৬','৭','৮','৯'][x] || x).join(''); }
     function fmtR(n) { return `'${toB(n.toString().padStart(2, '0'))}`; }
-
+    
     function getGP(m) {
         if (m >= 80) return {g:"A+", p:5}; if (m >= 70) return {g:"A", p:4};
         if (m >= 60) return {g:"A-", p:3.5}; if (m >= 50) return {g:"B", p:3};
@@ -133,7 +118,7 @@
         const students = db.s || {};
 
         document.getElementById('tableHead').innerHTML = colNames.map((n, i) => `<th>${i+1}৷ ${n}</th>`).join('');
-
+        
         let lastRoll = 0;
         for(let r=150; r>=1; r--) { if(students[r] && students[r].trim() !== "") { lastRoll = r; break; } }
         
@@ -163,8 +148,8 @@
                 let res = (cq<23 || mq<10) ? {g:"F", p:0} : getGP(row[c+2]);
                 row[c+3]=res.g; return { ...res, m: cq+mq };
             };
-            let mG=setManualG('math', 13), rG=setManualG('rel', 17), bB=setManualG('bss', 21);
 
+            let mG=setManualG('math', 13), rG=setManualG('rel', 17), bB=setManualG('bss', 21);
             let phCq=getV('phy','cq'), phMq=getV('phy','mcq'), phPr=getV('phy','prac');
             row[25]=phCq; row[26]=phMq; row[27]=phPr; row[28]=phCq+phMq+phPr;
             let phG = (phCq<17 || phMq<8 || phPr<8) ? {g:"F", p:0} : getGP(row[28]);
@@ -191,7 +176,7 @@
             row[48]=hmG.g;
 
             row[49] = row[5] + row[8] + row[10] + row[11] + row[15] + row[19] + row[23] + row[28] + row[33] + row[38] + row[42] + row[47];
-
+            
             let mainSubs = [bG, eG, mG, rG, bB, phG, chG, icG];
             let optSub, compSub;
             if(optSubSetting === "biology") { optSub = biG; compSub = hmG; } 
@@ -200,7 +185,7 @@
 
             let failCount = mainSubs.filter(x => x.g === "F").length;
             if (optSub.g === "F") failCount++;
-
+            
             if (gpaLogicSetting === "no_logic") {
                 row[50] = failCount > 0 ? `F${failCount}` : "";
             } else {
@@ -250,10 +235,7 @@
         }
         const rows = document.querySelectorAll('#tableBody tr');
         if (rows.length === 0) return alert("টেবিলে কোনো ডাটা নেই!");
-
-        // আপনার দেওয়া মেসেজ হুবহু রাখা হয়েছে
         const confirmMsg = `সতর্কতা: শিটে (${sheetTabName}) থাকা পূর্বের পাঠানো সকল ডাটা মুছে যাবে!\n\nআপনি কি নিশ্চিতভাবে আপলোড করতে চান?`;
-        
         if (confirm(confirmMsg)) {
             sendToGoogleSheet(scriptURL, sheetTabName, rows);
         }
