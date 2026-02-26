@@ -14,7 +14,6 @@
             --white: #ffffff;
             --filled-bg: #e8f5e9; 
         }
-
         * { box-sizing: border-box; }
         body { 
             font-family: 'Segoe UI', Tahoma, sans-serif; 
@@ -22,29 +21,23 @@
             margin: 0; padding: 0; 
             min-height: 100vh;
         }
-
         /* স্টিকি টপ নেভিগেশন */
         .top-nav { 
             position: sticky; top: 0; background: var(--white); 
             padding: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
             z-index: 1000;
         }
-
         .type-selector { 
             display: flex; gap: 8px; margin-bottom: 12px; 
             background: #eee; padding: 5px; border-radius: 10px;
         }
-
         .btn-tab { 
             flex: 1; padding: 10px 5px; border: none; border-radius: 8px;
             background: transparent; color: #555; font-weight: bold;
             font-size: 12px; cursor: pointer; transition: 0.3s;
         }
-
         .btn-tab.active { background: var(--white); color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-
         .btn-group { display: flex; gap: 10px; }
-
         .btn { 
             flex: 1; padding: 12px; border: none; border-radius: 10px; 
             color: white; font-weight: bold; cursor: pointer; font-size: 13px; 
@@ -55,47 +48,37 @@
         .btn-save { background: var(--success); }
         .btn-clear { background: var(--danger); }
         .btn-back { background: #333; text-decoration: none; }
-
         .container { max-width: 500px; margin: 15px auto; padding: 0 15px 100px 15px; }
-
         .header-title { 
             text-align: center; font-weight: bold; margin-bottom: 15px; 
             font-size: 17px; color: #333; background: #fff;
             padding: 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-
         /* এন্ট্রি কার্ড */
         .entry-card { 
             background: var(--white); padding: 20px; 
             border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         }
-
         .num-row { 
             display: flex; align-items: center; gap: 12px; 
             margin-bottom: 12px; padding-bottom: 8px;
             border-bottom: 1px solid #f0f0f0;
         }
-
         .num-row span { 
             width: 38px; font-weight: 800; color: var(--primary); 
             font-size: 14px; background: #e3f2fd;
             padding: 8px; border-radius: 6px; text-align: center;
         }
-
         input { 
             flex: 1; padding: 12px; border: 2px solid #eee; 
             border-radius: 10px; font-size: 15px; outline: none; 
             transition: all 0.3s; color: #333;
         }
-
         input:focus { border-color: var(--primary); box-shadow: 0 0 8px rgba(26,115,232,0.1); }
         input.filled { background-color: var(--filled-bg); border-color: var(--success); font-weight: 600; }
-
         .footer-text { text-align: center; font-size: 11px; color: #aaa; margin-top: 30px; letter-spacing: 1px; }
-
     </style>
 </head>
-
 <body onload="init()">
     <div class="top-nav">
         <div class="type-selector">
@@ -106,10 +89,9 @@
         <div class="btn-group">
             <button class="btn btn-save" onclick="saveData()"><i class="fas fa-save"></i> সংরক্ষণ</button>
             <button class="btn btn-clear" onclick="clearData()"><i class="fas fa-trash"></i> মুছুন</button>
-            <a href="file_A.html" class="btn btn-back"><i class="fas fa-arrow-left"></i> ফিরে যান</a>
+            <a href="#" onclick="navigateWithCacheBusting('file_A.html')" class="btn btn-back"><i class="fas fa-arrow-left"></i> ফিরে যান</a>
         </div>
     </div>
-
     <div class="container">
         <div class="header-title" id="current_title">
             <i class="fas fa-info-circle"></i> উপবৃত্তি এন্ট্রি (১-১৫০)
@@ -117,24 +99,28 @@
         <div class="entry-card" id="fields"></div>
         <div class="footer-text">POWERED BY PALASH MAHMOD</div>
     </div>
-
     <script>
         const KEY = "school_v3_data";
-        let currentTab = 'stipend'; 
+        let currentTab = localStorage.getItem('lastTab_AB') || 'stipend'; 
         let db = JSON.parse(localStorage.getItem(KEY)) || {};
-
-        // ডাটাবেস অবজেক্ট চেক
         if (!db.stipend) db.stipend = {};
         if (!db.reg) db.reg = {};
         if (!db.dob) db.dob = {};
 
-        function init() { renderFields(); }
+        function navigateWithCacheBusting(page) {
+            const timestamp = new Date().getTime();
+            window.location.href = page + "?v=" + timestamp;
+        }
 
+        function init() { 
+            switchTab(currentTab); 
+        }
         function switchTab(type) {
             currentTab = type;
+            localStorage.setItem('lastTab_AB', type); 
             document.querySelectorAll('.btn-tab').forEach(b => b.classList.remove('active'));
             document.getElementById('tab_' + type).classList.add('active');
-
+            
             const titles = { 
                 stipend: '<i class="fas fa-money-check-alt"></i> উপবৃত্তি এন্ট্রি', 
                 reg: '<i class="fas fa-id-card"></i> রেজিষ্ট্রেশন নং এন্ট্রি', 
@@ -143,9 +129,7 @@
             document.getElementById('current_title').innerHTML = titles[type] + " (১-১৫০)";
             
             renderFields();
-            window.scrollTo(0,0);
         }
-
         function renderFields() {
             let html = "";
             let currentData = db[currentTab];
@@ -161,31 +145,28 @@
             }
             document.getElementById('fields').innerHTML = html;
         }
-
         function handleInput(el) {
             if (el.value.trim() !== "") el.classList.add('filled');
             else el.classList.remove('filled');
         }
-
         function toB(n) {
             const b = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
             return n.toString().padStart(2, '0').split('').map(x => b[x] || x).join('');
         }
-
         function saveData() {
             for (let i = 1; i <= 150; i++) {
                 db[currentTab][i] = document.getElementById('input_' + i).value.trim();
             }
             localStorage.setItem(KEY, JSON.stringify(db));
-            alert("তথ্য সফলভাবে সংরক্ষিত হয়েছে!");
+            alert("তথ্য সফলভাবে সংরক্ষিত হয়েছে!");
+            navigateWithCacheBusting(window.location.pathname.split('/').pop());
         }
-
         function clearData() {
             let titles = { stipend: 'উপবৃত্তি', reg: 'রেজিষ্ট্রেশন', dob: 'জন্মতারিখ' };
             if (confirm("আপনি কি নিশ্চিতভাবে সকল " + titles[currentTab] + " তথ্য মুছে ফেলবেন?")) {
                 db[currentTab] = {};
                 localStorage.setItem(KEY, JSON.stringify(db));
-                renderFields();
+                navigateWithCacheBusting(window.location.pathname.split('/').pop());
             }
         }
     </script>
