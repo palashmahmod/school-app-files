@@ -55,7 +55,8 @@
             margin-bottom: 20px;
         }
         .login-btn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px; }
-        /* --- ফটো এবং ওভারলে টেক্সট স্টাইল --- */
+        
+        /* --- ফটো স্টাইল --- */
         .school-img-container {
             position: relative;
             width: 100%;
@@ -73,19 +74,13 @@
             display: block;
         }
         .overlay-footer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            font-size: 9px;
-            font-weight: 700;
-            color: white;
-            text-align: center;
-            letter-spacing: 1px;
+            position: absolute; bottom: 0; left: 0; right: 0;
+            font-size: 9px; font-weight: 700; color: white;
+            text-align: center; letter-spacing: 1px;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-            background: rgba(0,0,0,0.4);
-            padding: 5px 0;
+            background: rgba(0,0,0,0.4); padding: 5px 0;
         }
+
         /* --- হোম পেজ কন্টেইনার --- */
         .container { 
             width: 100%; max-width: 550px; padding: 25px; margin: 0 auto;
@@ -93,42 +88,36 @@
         }
         .header { text-align: center; margin-bottom: 40px; color: var(--white); }
         .header h1 { font-size: 22px; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
-        .grid-container { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 25px; width: 100%; 
-        }
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; width: 100%; }
         .menu-card { 
             height: 140px; background: var(--white); 
             border-radius: 20px; display: flex; flex-direction: column; 
             justify-content: center; align-items: center; 
             text-decoration: none; transition: all 0.2s ease; cursor: pointer;
-            box-shadow: 8px 8px 15px rgba(0,0,0,0.4); 
-            border: none;
+            box-shadow: 8px 8px 15px rgba(0,0,0,0.4); border: none;
         }
         .menu-card:hover { transform: translate(-2px, -2px); box-shadow: 12px 12px 20px rgba(0,0,0,0.5); }
-        .menu-card:active { transform: translate(6px, 6px); box-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
         .menu-card i { font-size: 35px; margin-bottom: 12px; }
         .card-a i { color: #1a73e8; }
         .card-b i { color: #2ecc71; }
         .card-c i { color: #f1c40f; }
         .card-d i { color: #e67e22; }
         .menu-card span { font-size: 13px; font-weight: 700; text-align: center; padding: 0 10px; color: #34495e; }
+        
         .delete-btn-container { margin-top: 50px; text-align: center; }
         .delete-btn {
             background: var(--white); border: none; color: var(--danger);
             padding: 12px 25px; border-radius: 50px; font-size: 12px;
-            cursor: pointer; font-weight: 700;
-            box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
-            transition: 0.3s;
+            cursor: pointer; font-weight: 700; box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
         }
-        .delete-btn:active { transform: scale(0.95); box-shadow: 2px 2px 5px rgba(0,0,0,0.2); }
         .footer-text {
             font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.7);
-            text-align: center; margin-top: auto; padding: 25px; 
-            letter-spacing: 2px;
+            text-align: center; margin-top: auto; padding: 25px; letter-spacing: 2px;
         }
     </style>
 </head>
 <body>
+
     <div id="loginScreen">
         <div class="login-card">
             <i class="fas fa-lock" style="font-size: 40px; color: var(--primary-blue); margin-bottom: 15px;"></i>
@@ -136,11 +125,12 @@
             <input type="password" id="pinInput" placeholder="পিন কোড দিন">
             <button class="login-btn" onclick="checkPin()">LOGIN</button>
             <div class="school-img-container">
-                <img src="school_photo.jpg" alt="School Photo">
+                <img id="school-photo" src="school_photo.jpg" alt="School Photo">
                 <div class="overlay-footer">POWERED BY PALASH MAHMOD</div>
             </div>
         </div>
     </div>
+
     <div id="mainHome" class="container">
         <div class="header">
             <h1>আখাউড়া নাছরীন নবী পাইলট বালিকা উচ্চ বিদ্যালয়</h1>
@@ -170,8 +160,18 @@
         </div>
         <div class="footer-text">POWERED BY PALASH MAHMOD</div>
     </div>
+
     <script>
         const MASTER_PIN = "pm5522";
+
+        // ইমেজে ক্যাশ বাস্টিং যুক্ত করার ফাংশন
+        function applyImageCacheBusting() {
+            const timestamp = new Date().getTime();
+            const schoolImg = document.getElementById('school-photo');
+            if(schoolImg) {
+                schoolImg.src = "school_photo.jpg?v=" + timestamp;
+            }
+        }
 
         function navigateWithCacheBusting(page) {
             const timestamp = new Date().getTime();
@@ -187,15 +187,21 @@
                 alert("ভুল পিন! আবার চেষ্টা করুন।");
             }
         }
+
         function showHome() {
             document.getElementById('loginScreen').style.display = "none";
             document.getElementById('mainHome').style.display = "flex";
         }
+
         window.onload = function() {
+            // পেজ লোড হলেই ইমেজে ক্যাশ বাস্টিং অ্যাপ্লাই হবে
+            applyImageCacheBusting();
+            
             if (localStorage.getItem("appLoggedIn") === "true") {
                 showHome();
             }
         }
+
         function secureDelete() {
             const pass = prompt("তথ্য মুছতে পাসওয়ার্ড দিন:");
             if (pass === MASTER_PIN) {
