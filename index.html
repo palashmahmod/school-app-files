@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>আখাউড়া নাছরীন নবী পাইলট বালিকা উচ্চ বিদ্যালয়</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    
     <style>
         :root { 
             --bg-gradient: linear-gradient(135deg, #4b6681 0%, #31475e 100%);
@@ -23,6 +26,35 @@
             flex-direction: column; 
             min-height: 100vh; 
         }
+
+        /* --- নোটিশ বোর্ড স্টাইল --- */
+        #noticeBoard {
+            display: none; /* শুরুতে ইনভিজিবল থাকবে */
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            border-left: 5px solid var(--primary-blue);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        #noticeTitle {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #noticeContent {
+            font-size: 15px;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+
         /* --- স্মার্ট ৩ডি লগইন স্ক্রিন --- */
         #loginScreen { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
@@ -80,14 +112,14 @@
             text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
             background: rgba(0,0,0,0.4); padding: 5px 0;
         }
-
         /* --- হোম পেজ কন্টেইনার --- */
         .container { 
             width: 100%; max-width: 550px; padding: 25px; margin: 0 auto;
             box-sizing: border-box; display: none; flex-direction: column; min-height: 100vh;
         }
-        .header { text-align: center; margin-bottom: 40px; color: var(--white); }
+        .header { text-align: center; margin-bottom: 30px; color: var(--white); }
         .header h1 { font-size: 22px; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
+
         .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; width: 100%; }
         .menu-card { 
             height: 140px; background: var(--white); 
@@ -117,7 +149,6 @@
     </style>
 </head>
 <body>
-
     <div id="loginScreen">
         <div class="login-card">
             <i class="fas fa-lock" style="font-size: 40px; color: var(--primary-blue); margin-bottom: 15px;"></i>
@@ -135,6 +166,12 @@
         <div class="header">
             <h1>আখাউড়া নাছরীন নবী পাইলট বালিকা উচ্চ বিদ্যালয়</h1>
         </div>
+
+        <div id="noticeBoard">
+            <div id="noticeTitle"><i class="fas fa-bell"></i> সর্বশেষ নোটিশ:</div>
+            <div id="noticeContent">লোডিং...</div>
+        </div>
+
         <div class="grid-container">
             <a href="#" onclick="navigateWithCacheBusting('file_A.html')" class="menu-card card-a">
                 <i class="fas fa-user-graduate"></i>
@@ -153,18 +190,50 @@
                 <span>ফলাফল বিবরণী (D)</span>
             </a>
         </div>
+
         <div class="delete-btn-container">
             <button class="delete-btn" onclick="secureDelete()">
                 <i class="fas fa-trash-can"></i> সকল তথ্য মুছুন
             </button>
         </div>
+
         <div class="footer-text">POWERED BY PALASH MAHMOD</div>
     </div>
 
     <script>
+        // Firebase Config (Master.html থেকে সংগৃহীত)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDrIXV59kVjFKFKARHVJix7HuAU1FUfDk4",
+            authDomain: "school-management-system-1279f.firebaseapp.com",
+            databaseURL: "https://school-management-system-1279f-default-rtdb.firebaseio.com",
+            projectId: "school-management-system-1279f",
+            storageBucket: "school-management-system-1279f.firebasestorage.app",
+            messagingSenderId: "862359845997",
+            appId: "1:862359845997:web:e8a3c61807ae3b67971364",
+            measurementId: "G-37D4DBEY18"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
         const MASTER_PIN = "pm5522";
 
-        // ইমেজে ক্যাশ বাস্টিং যুক্ত করার ফাংশন
+        // নোটিশ রিয়েল-টাইম আপডেট শো করার ফাংশন
+        function listenToNotice() {
+            database.ref('control/notice').on('value', (snapshot) => {
+                const data = snapshot.val();
+                const board = document.getElementById('noticeBoard');
+                const content = document.getElementById('noticeContent');
+                
+                if (data && data.active === true) {
+                    board.style.display = "block";
+                    content.innerHTML = data.text;
+                    content.style.color = data.color || "black";
+                } else {
+                    board.style.display = "none";
+                }
+            });
+        }
+
         function applyImageCacheBusting() {
             const timestamp = new Date().getTime();
             const schoolImg = document.getElementById('school-photo');
@@ -191,12 +260,11 @@
         function showHome() {
             document.getElementById('loginScreen').style.display = "none";
             document.getElementById('mainHome').style.display = "flex";
+            listenToNotice(); // হোম পেজ আসার পর নোটিশ লিসেনার চালু হবে
         }
 
         window.onload = function() {
-            // পেজ লোড হলেই ইমেজে ক্যাশ বাস্টিং অ্যাপ্লাই হবে
             applyImageCacheBusting();
-            
             if (localStorage.getItem("appLoggedIn") === "true") {
                 showHome();
             }
