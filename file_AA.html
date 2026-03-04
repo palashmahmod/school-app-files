@@ -89,6 +89,7 @@
         <div class="footer-text">POWERED BY PALASH MAHMOD</div>
     </div>
     <textarea id="copyArea"></textarea>
+
     <script>
         const KEY = "school_v3_data";
         let db = JSON.parse(localStorage.getItem(KEY)) || { s: {} };
@@ -111,15 +112,18 @@
             }
             document.getElementById('fields').innerHTML = html;
         }
+
         function handleInput(el) { 
             if (el.value.trim() !== "") el.classList.add('filled'); 
             else el.classList.remove('filled'); 
         }
+
         function toBengali(n) {
             const b = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
             let s = n.toString().padStart(2, '0');
             return s.split('').map(x => b[x] || x).join('');
         }
+
         function saveNames() {
             for (let i = 1; i <= 150; i++) {
                 db.s[i] = document.getElementById('name_' + i).value.trim();
@@ -128,13 +132,11 @@
             alert("নামগুলো সফলভাবে সংরক্ষিত হয়েছে!");
             navigateWithCacheBusting(window.location.pathname.split('/').pop());
         }
+
         function pasteNames() {
-            let raw = prompt("Excel বা অন্য জায়গা থেকে নামগুলো এখানে পেস্ট করুন:");
+            let raw = prompt("নামের শেষে কমা (,) দিয়ে লেখা লিস্টটি এখানে পেস্ট করুন:");
             if (!raw) return;
-            let namesArray = raw.split(/\r?\n/).map(line => {
-                let parts = line.split('\t');
-                return parts.length > 1 ? parts[1].trim() : parts[0].trim();
-            }).filter(n => n !== "");
+            let namesArray = raw.split(',').map(name => name.trim()).filter(n => n !== "");
             namesArray.forEach((name, index) => {
                 if (index < 150) {
                     let input = document.getElementById('name_' + (index + 1));
@@ -144,14 +146,17 @@
                     }
                 }
             });
-            alert(namesArray.length + " টি নাম ইনপুট করা হয়েছে। সংরক্ষণ করতে 'সেভ' বাটনে ক্লিক করুন।");
+            alert(namesArray.length + " টি নাম আলাদা করা হয়েছে। নিচের ঘরগুলো চেক করে 'সেভ' বাটনে ক্লিক করুন।");
         }
+
+        /* ৩টি কলামে ডাটা তৈরির জন্য সংশোধিত কপি ফাংশন */
         function copyNames() {
             let text = "";
             for (let i = 1; i <= 150; i++) {
                 let name = document.getElementById('name_' + i).value.trim();
                 if (name !== "") {
-                    text += "'" + toBengali(i) + "\t" + name + "\n";
+                    // ৩টি কলাম সিস্টেম: রোল + ট্যাব + নাম + ট্যাব + কমা
+                    text += "'" + toBengali(i) + "\t" + name + "\t" + "," + "\n";
                 }
             }
             if (!text) {
@@ -162,8 +167,9 @@
             area.value = text; 
             area.select();
             document.execCommand('copy');
-            alert("নামগুলো Excel Format-এ কপি হয়েছে!");
+            alert("নামগুলো ৩টি কলাম ফরমেটে (রোল, নাম, কমা) কপি হয়েছে!");
         }
+
         function clearNames() { 
             if (confirm("সতর্কতা: আপনি কি নিশ্চিতভাবে সব নাম মুছে ফেলতে চান?")) { 
                 db.s = {}; 
@@ -171,6 +177,7 @@
                 navigateWithCacheBusting(window.location.pathname.split('/').pop());
             } 
         }
+
         function loadData() { createFields(); }
     </script>
 </body>
