@@ -6,24 +6,95 @@
     <title>অ্যাপ লোড হচ্ছে...</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        body { background: #31475e; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; color: white; }
-        .loader-container { text-align: center; }
-        .spinner { border: 4px solid rgba(255, 255, 255, 0.2); border-top: 4px solid #ffffff; border-radius: 50%; width: 45px; height: 45px; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+        :root { 
+            --primary: #2c3e50; 
+            --accent: #1976d2; 
+            --bg: #31475e; 
+            --white: #ffffff;
+        }
+        body { 
+            background: var(--bg); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            color: white; 
+            overflow: hidden; 
+        }
+        .loader-container { text-align: center; padding: 20px; width: 90%; max-width: 400px; }
+        
+        /* প্রোফাইল ইমেজ ডিজাইন (CD ফাইলের মতো) */
+        .profile-img { 
+            width: 110px; 
+            height: 110px; 
+            border-radius: 50%; 
+            border: 4px solid #1976d2; 
+            margin: 0 auto 20px; 
+            display: block; 
+            object-fit: cover; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+            background: #eee; 
+        }
+
+        .spinner { 
+            border: 4px solid rgba(255, 255, 255, 0.2); 
+            border-top: 4px solid #ffffff; 
+            border-radius: 50%; 
+            width: 45px; 
+            height: 45px; 
+            animation: spin 1s linear infinite; 
+            margin: 0 auto 15px; 
+        }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        p { font-size: 16px; letter-spacing: 1px; }
+        
+        /* মেইনটেন্যান্স ডিজাইন */
+        .maintenance-box { 
+            background: white; 
+            color: var(--primary); 
+            padding: 40px 20px; 
+            border-radius: 25px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+            animation: fadeIn 0.6s ease-out;
+        }
+        .maintenance-box i.tools-icon { 
+            font-size: 45px; 
+            color: #e67e22; 
+            margin-bottom: 15px; 
+            display: block;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        
+        h2 { font-size: 20px; color: #d35400; margin: 10px 0; font-weight: 800; }
+        p { font-size: 14px; color: #7f8c8d; line-height: 1.6; margin-bottom: 0; }
+        
+        .footer-text { 
+            margin-top: 25px; 
+            font-size: 11px; 
+            font-weight: bold; 
+            letter-spacing: 1.5px; 
+            color: #bdc3c7; 
+            text-transform: uppercase;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body>
+<body onload="applyImgCache()">
 
-<div class="loader-container">
-    <div class="spinner"></div>
-    <p id="status-text">সার্ভারের সাথে সংযোগ করা হচ্ছে...</p>
+<div id="main-content" class="loader-container">
+    <div id="loader-view">
+        <div class="spinner"></div>
+        <p id="status-text">সার্ভারের সাথে সংযোগ করা হচ্ছে...</p>
+    </div>
 </div>
 
 <script>
-    // Firebase কনফিগারেশন
     const firebaseConfig = {
         apiKey: "AIzaSyDrIXV59kVjFKFKARHVJix7HuAU1FUfDk4",
         authDomain: "school-management-system-1279f.firebaseapp.com",
@@ -31,35 +102,47 @@
         projectId: "school-management-system-1279f",
         storageBucket: "school-management-system-1279f.firebasestorage.app",
         messagingSenderId: "862359845997",
-        appId: "1:862359845997:web:e8a3c61807ae3b67971364",
-        measurementId: "G-37D4DBEY18"
+        appId: "1:862359845997:web:e8a3c61807ae3b67971364"
     };
 
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
-    const statusText = document.getElementById('status-text');
-
-    // Cache Busting-এর জন্য টাইমস্ট্যাম্প জেনারেটর
+    const mainContent = document.getElementById('main-content');
     const v = new Date().getTime();
+
+    function applyImgCache() {
+        // ইমেজ ক্যাশ বাস্টিং এর জন্য লজিক (যদি ইমেজ এলিমেন্ট তৈরি হয়)
+        const photo = document.getElementById('user-photo');
+        if(photo) photo.src = "palash.jpg?v=" + v;
+    }
 
     database.ref('control').once('value').then((snapshot) => {
         const data = snapshot.val();
         
         if (data && data.update_status === true) {
-            statusText.innerText = "অনলাইন আপডেট চেক করা হচ্ছে...";
-            // অনলাইন URL-এর সাথে টাইমস্ট্যাম্প যুক্ত করা হয়েছে
-            const onlineTarget = data.online_url + "index.html?v=" + v;
+            const onlineTarget = (data.online_url || "") + "index.html?v=" + v;
             window.location.replace(onlineTarget);
         } else {
-            statusText.innerText = "অ্যাপ শুরু হচ্ছে...";
-            // লোকাল ফাইলের সাথেও টাইমস্ট্যাম্প যুক্ত করা হয়েছে
-            window.location.href = "index.html?v=" + v;
+            showMaintenanceMode();
         }
     }).catch((error) => {
         console.error("Firebase Connection Error:", error);
-        // ইন্টারনেট না থাকলে বা এরর হলে লোকাল ফাইল লোড হবে
         window.location.href = "index.html?v=" + v;
     });
+
+    function showMaintenanceMode() {
+        mainContent.innerHTML = `
+            <img id="user-photo" src="palash.jpg?v=${v}" alt="Palash Mahmod" class="profile-img">
+            <div class="maintenance-box">
+                <i class="fas fa-tools tools-icon"></i>
+                <h2>সিস্টেম আপডেট চলছে</h2>
+                <p>আমরা বর্তমানে অ্যাপটির মেইনটেন্যান্সের কাজ করছি। সাময়িক অসুবিধার জন্য দুঃখিত। খুব শীঘ্রই আবার ফিরে আসছি।</p>
+                <div style="margin: 15px auto; width: 40px; border-bottom: 2px solid #eee;"></div>
+                <div style="font-size: 10px; color: #95a5a6;">অনুগ্রহ করে কিছুক্ষণ পর চেষ্টা করুন</div>
+            </div>
+            <div class="footer-text">POWERED BY PALASH MAHMOD</div>
+        `;
+    }
 </script>
 </body>
 </html>
