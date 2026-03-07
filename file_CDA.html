@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>চেক লিস্ট ড্যাশবোর্ড - CDA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { 
+            --primary: #2c3e50; 
+            --accent: #1976d2; 
+            --bg: #e3f2fd; /* প্রফেশনাল হালকা নীল ব্যাকগ্রাউন্ড */
+            --white: #ffffff;
+            --text-dark: #2c3e50;
+            --btn-blue-gradient: linear-gradient(145deg, #2196f3, #1976d2); /* নীল গ্রেডিয়েন্ট */
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            color: var(--primary); 
+        }
+
+        .card { 
+            background: white; 
+            padding: 30px 20px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            text-align: center; 
+            max-width: 420px; 
+            width: 90%; 
+            border: 1px solid rgba(0,0,0,0.1); 
+        }
+
+        .header-box { margin-bottom: 25px; }
+        .header-box i { font-size: 40px; color: #1976d2; margin-bottom: 10px; }
+        .header-box h2 { font-size: 20px; color: #d35400; font-weight: 800; margin: 5px 0; }
+        
+        /* প্রফেশনাল নীল বাটন ডিজাইন (CDAA স্টাইল) */
+        .menu-card { 
+            background: var(--btn-blue-gradient); 
+            padding: 18px; 
+            border-radius: 15px; 
+            cursor: pointer;
+            color: white; 
+            display: none; /* শুরুতে লুকানো থাকবে */
+            align-items: center; 
+            gap: 15px; 
+            transition: all 0.2s ease; 
+            box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3); 
+            border: none;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .menu-card:active { transform: scale(0.96); }
+        
+        .icon-circle { 
+            width: 45px; height: 45px; border-radius: 12px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 20px; color: #fff; flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .menu-text { 
+            flex-grow: 1; 
+            font-weight: 700; 
+            font-size: 15px; 
+            color: #ffffff; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* নিচের নেভিগেশন বাটন */
+        .footer-nav { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .btn-nav { 
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 12px; border-radius: 50px; font-weight: bold; font-size: 14px;
+            text-decoration: none; transition: 0.3s; cursor: pointer; border: none;
+        }
+
+        .btn-prev { background: #34495e; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .btn-home { background: #1a73e8; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .btn-nav:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        .footer-tag { margin-top: 25px; font-size: 10px; font-weight: bold; color: #95a5a6; border-top: 1px solid #eee; padding-top: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* কোনো সিলেকশন না থাকলে মেসেজ */
+        #no-selection { color: #e74c3c; font-weight: bold; display: none; padding: 20px; }
+    </style>
+</head>
+
+<body onload="initializePage()">
+<div class="card">
+    <div class="header-box">
+        <i class="fas fa-clipboard-check"></i>
+        <h2>চেক লিস্ট নির্বাচন করুন</h2>
+    </div>
+
+    <div id="btn-junior" onclick="navigateWithCacheBusting('file_CDAA.html')" class="menu-card">
+        <div class="icon-circle"><i class="fas fa-user-graduate"></i></div>
+        <div class="menu-text">৬ষ্ঠ-৮ম শ্রেণি চেক লিস্ট</div>
+        <i class="fas fa-chevron-right" style="color:rgba(255,255,255,0.7); font-size: 12px;"></i>
+    </div>
+
+    <div id="btn-science" onclick="navigateWithCacheBusting('file_CDAB.html')" class="menu-card">
+        <div class="icon-circle"><i class="fas fa-atom"></i></div>
+        <div class="menu-text">৯ম-১০ম (বিজ্ঞান) চেক লিস্ট</div>
+        <i class="fas fa-chevron-right" style="color:rgba(255,255,255,0.7); font-size: 12px;"></i>
+    </div>
+
+    <div id="btn-commerce" onclick="navigateWithCacheBusting('file_CDAC.html')" class="menu-card">
+        <div class="icon-circle"><i class="fas fa-chart-line"></i></div>
+        <div class="menu-text">৯ম-১০ম (ব্যবসায়) চেক লিস্ট</div>
+        <i class="fas fa-chevron-right" style="color:rgba(255,255,255,0.7); font-size: 12px;"></i>
+    </div>
+
+    <div id="btn-humanities" onclick="navigateWithCacheBusting('file_CDAD.html')" class="menu-card">
+        <div class="icon-circle"><i class="fas fa-book-open"></i></div>
+        <div class="menu-text">৯ম-১০ম (মানবিক) চেক লিস্ট</div>
+        <i class="fas fa-chevron-right" style="color:rgba(255,255,255,0.7); font-size: 12px;"></i>
+    </div>
+
+    <div id="no-selection">
+        <i class="fas fa-exclamation-triangle"></i><br>
+         শ্রেণি নির্ধারণ করা হয়নি!<br>
+        <small style="color:#7f8c8d">দয়া করে সেটিংস থেকে শ্রেণি নির্বাচন করুন।</small>
+    </div>
+
+    <div class="footer-nav">
+        <div onclick="navigateWithCacheBusting('file_CD.html')" class="btn-nav btn-prev">
+            <i class="fas fa-arrow-left"></i> আগের পেইজে ফিরে যান
+        </div>
+        <div onclick="navigateWithCacheBusting('index.html')" class="btn-nav btn-home">
+            <i class="fas fa-home"></i> হোম মেনুতে ফিরে যান
+        </div>
+    </div>
+    <div class="footer-tag">POWERED BY PALASH MAHMOD</div>
+</div>
+
+<script>
+    function initializePage() {
+        const savedSetting = localStorage.getItem('master_cb_setting');
+        if (savedSetting) {
+            if (savedSetting === 'junior') document.getElementById('btn-junior').style.display = 'flex';
+            else if (savedSetting === 'science') document.getElementById('btn-science').style.display = 'flex';
+            else if (savedSetting === 'commerce') document.getElementById('btn-commerce').style.display = 'flex';
+            else if (savedSetting === 'humanities') document.getElementById('btn-humanities').style.display = 'flex';
+        } else {
+            document.getElementById('no-selection').style.display = 'block';
+        }
+    }
+
+    function navigateWithCacheBusting(page) {
+        const timestamp = new Date().getTime();
+        window.location.href = page + "?v=" + timestamp;
+    }
+
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        navigateWithCacheBusting('file_CD.html');
+    };
+</script>
+</body>
+</html>
