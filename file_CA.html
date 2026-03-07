@@ -73,11 +73,11 @@
             display: flex; align-items: center; justify-content: center; 
             gap: 10px; margin-top: 15px; transition: 0.2s;
             box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
-            text-decoration: none;
+            box-sizing: border-box; /* এটি ডানপাশে বড় হওয়া রোধ করবে */
         }
         .btn-action:active { transform: translate(2px, 2px); box-shadow: none; }
         .btn-save { background: var(--success); box-shadow: 4px 4px 0px #1e8449; }
-        .btn-back { background: var(--text-dark); box-shadow: 4px 4px 0px #111; }
+        .btn-back { background: var(--text-dark); box-shadow: 4px 4px 0px #111; text-decoration: none; }
         .footer-text { text-align: center; font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 30px; letter-spacing: 1px; }
     </style>
 </head>
@@ -116,7 +116,6 @@
 <div class="footer-text">POWERED BY PALASH MAHMOD</div>
 
 <script>
-    // Cache Busting Navigation
     function navigateWithCacheBusting(page) {
         const timestamp = new Date().getTime();
         window.location.href = page + "?v=" + timestamp;
@@ -126,11 +125,13 @@
     let db = JSON.parse(localStorage.getItem(KEY)) || { other: {} };
 
     window.onload = function() {
-        for(let i=1; i<=9; i++) {
-            if(db.other && db.other[i]) document.getElementById(`val_${i}`).value = db.other[i];
-        }
-        if(db.other && db.other.extra) {
-            db.other.extra.forEach((item) => createField(item.name, item.value, true));
+        if(db.other) {
+            for(let i=1; i<=9; i++) {
+                if(db.other[i]) document.getElementById(`val_${i}`).value = db.other[i];
+            }
+            if(db.other.extra) {
+                db.other.extra.forEach((item) => createField(item.name, item.value, true));
+            }
         }
     };
 
@@ -148,7 +149,7 @@
             <button class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
         `;
         container.appendChild(div);
-        document.getElementById('newFieldName').value = "";
+        if(!isLoad) document.getElementById('newFieldName').value = "";
     }
 
     function saveCAData() {
@@ -166,6 +167,11 @@
         localStorage.setItem(KEY, JSON.stringify(db));
         alert("সফলভাবে তথ্য সংরক্ষিত হয়েছে!");
     }
+
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        navigateWithCacheBusting('file_C.html');
+    };
 </script>
 </body>
 </html>
