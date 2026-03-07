@@ -6,58 +6,174 @@
     <title>সিস্টেম স্ট্যাটাস - CD</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #2c3e50; --accent: #3498db; --bg: #f4f7f6; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; color: var(--primary); }
-        .card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 90%; border: 2px solid #000; }
-        .profile-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid var(--accent); margin: 0 auto 15px; display: block; object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.2); background: #eee; }
+        :root { 
+            --primary: #2c3e50; 
+            --accent: #1976d2; 
+            --bg: #e3f2fd; /* CDAA এর মতো হালকা নীল ব্যাকগ্রাউন্ড */
+            --white: #ffffff;
+            --success: #2ecc71;
+            --text-dark: #2c3e50;
+            --btn-blue-gradient: linear-gradient(145deg, #2196f3, #1976d2); /* হালকা থেকে গাঢ় নীল গ্রেডিয়েন্ট */
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            color: var(--primary); 
+        }
+
+        .card { 
+            background: white; 
+            padding: 40px 20px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            text-align: center; 
+            max-width: 400px; 
+            width: 90%; 
+            border: 1px solid rgba(0,0,0,0.1); 
+        }
+
+        .profile-img { 
+            width: 110px; 
+            height: 110px; 
+            border-radius: 50%; 
+            border: 4px solid #1976d2; 
+            margin: 0 auto 20px; 
+            display: block; 
+            object-fit: cover; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+            background: #eee; 
+        }
+
+        /* প্রফেশনাল নীল বাটন ডিজাইন (CDAA স্টাইল) */
+        .menu-card { 
+            background: var(--btn-blue-gradient); 
+            padding: 15px; 
+            border-radius: 15px; 
+            cursor: pointer;
+            color: white; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            transition: all 0.2s ease; 
+            box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3); 
+            border: none;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .menu-card:active { transform: scale(0.96); }
+
+        .icon-circle { 
+            width: 45px; height: 45px; border-radius: 12px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 20px; color: #fff; flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.2); 
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .menu-text { 
+            flex-grow: 1; 
+            font-weight: 700; 
+            font-size: 15px; 
+            color: #ffffff; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
         .icon-box { font-size: 35px; color: #e67e22; margin-bottom: 10px; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        h2 { margin: 10px 0; font-size: 22px; color: #d35400; }
-        p { font-size: 15px; color: #7f8c8d; margin-bottom: 25px; line-height: 1.5; }
-        .btn-back { display: inline-flex; align-items: center; gap: 10px; background: #000; color: white; padding: 12px 28px; border-radius: 50px; text-decoration: none; font-weight: bold; transition: 0.3s; cursor: pointer; }
-        .btn-back:hover { background: #333; transform: translateY(-2px); }
-        .footer { margin-top: 30px; font-size: 11px; font-weight: bold; letter-spacing: 1.5px; color: #95a5a6; border-top: 1px solid #eee; padding-top: 15px; }
-        .loader { width: 25px; height: 25px; border: 3px solid #f3f3f3; border-top: 3px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite; margin: 10px auto; }
+
+        h2 { margin: 10px 0; font-size: 19px; color: #d35400; font-weight: 800; }
+        p { font-size: 14px; color: #7f8c8d; margin-bottom: 25px; line-height: 1.5; }
+
+        .btn-back { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 10px; 
+            background: #34495e; 
+            color: white; 
+            padding: 12px 28px; 
+            border-radius: 50px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            transition: 0.3s; 
+            cursor: pointer; 
+            border: none; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-back:hover { background: #2c3e50; transform: translateY(-2px); }
+
+        .footer { 
+            margin-top: 30px; 
+            font-size: 11px; 
+            font-weight: bold; 
+            letter-spacing: 1.5px; 
+            color: #95a5a6; 
+            border-top: 1px solid #eee; 
+            padding-top: 15px; 
+            text-transform: uppercase; 
+        }
+
+        .loader { 
+            width: 25px; 
+            height: 25px; 
+            border: 3px solid #f3f3f3; 
+            border-top: 3px solid #1976d2; 
+            border-radius: 50%; 
+            animation: spin 1s linear infinite; 
+            margin: 10px auto; 
+        }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
+
 <body onload="applyImgCache()">
 <div class="card">
     <img id="user-photo" src="palash.jpg" alt="Palash Mahmod" class="profile-img">
-    
+
+    <div onclick="navigateWithCacheBusting('file_CDA.html')" class="menu-card">
+        <div class="icon-circle"><i class="fas fa-list-check"></i></div>
+        <div class="menu-text">এন্ট্রি করা বিষয় বস্তুর চেক লিস্ট</div>
+        <i class="fas fa-chevron-right" style="color:rgba(255,255,255,0.7); font-size: 12px;"></i>
+    </div>
+
     <div class="icon-box">
         <i class="fas fa-tools"></i>
     </div>
-    
+
     <div class="loader"></div>
-    <h2>সিস্টেম এখনো চালু হয়নি</h2>
+    <h2>আরও কিছু সিস্টেম যুক্ত হবে</h2>
     <p>এই মডিউলটির কাজ বর্তমানে প্রক্রিয়াধীন রয়েছে। খুব শীঘ্রই এটি ব্যবহারের জন্য উন্মুক্ত করা হবে।</p>
-    
+
     <div onclick="navigateHome()" class="btn-back">
         <i class="fas fa-arrow-left"></i> হোম পেইজে ফিরে যান
     </div>
-    
+
     <div class="footer">
         POWERED BY PALASH MAHMOD
     </div>
 </div>
 
 <script>
-    // ইমেজে ক্যাশ বাস্টিং অ্যাপ্লাই করা
     function applyImgCache() {
         const timestamp = new Date().getTime();
         const photo = document.getElementById('user-photo');
-        // ছবি লোড করার সময় লিঙ্কের শেষে টাইমস্ট্যাম্প যোগ হবে
-        photo.src = "palash.jpg?v=" + timestamp;
+        if(photo) photo.src = "palash.jpg?v=" + timestamp;
     }
-
-    // Cache Busting Navigation
+    function navigateWithCacheBusting(page) {
+        const timestamp = new Date().getTime();
+        window.location.href = page + "?v=" + timestamp;
+    }
     function navigateHome() {
         const timestamp = new Date().getTime();
         window.location.href = "index.html?v=" + timestamp;
     }
-
-    // মোবাইল ব্যাক বাটন হ্যান্ডেল
     history.pushState(null, null, location.href);
     window.onpopstate = function () {
         navigateHome();
