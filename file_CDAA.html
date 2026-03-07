@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>চেক লিস্ট (Pro) - CDAA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #e3f2fd; /* প্রফেশনাল হালকা নীল ব্যাকগ্রাউন্ড */
+            --primary-blue: linear-gradient(145deg, #2196f3, #1976d2); /* হালকা থেকে গাঢ় নীল বাটন */
+            --card-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+            --text-color: #2c3e50;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: var(--bg-color); 
+            margin: 0;
+            padding: 15px;
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+        /* 3D Neumorphic Header */
+        .header-box {
+            background: var(--bg-color);
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        .header-box h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #0d47a1;
+            text-transform: uppercase;
+        }
+        /* Paste Area */
+        .paste-area {
+            background: var(--bg-color);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: inset 6px 6px 12px #b8b9be, inset -6px -6px 12px #ffffff;
+            margin-bottom: 25px;
+        }
+        textarea {
+            width: 100%;
+            height: 70px;
+            border: none;
+            background: transparent;
+            padding: 10px;
+            box-sizing: border-box;
+            outline: none;
+            font-size: 13px;
+            color: #444;
+        }
+        .btn-process {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 10px;
+            border: none;
+            background: #0d47a1;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(13, 71, 161, 0.3);
+        }
+        /* 3D Blue Menu Cards */
+        #buttonContainer {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        .menu-card {
+            background: var(--primary-blue);
+            padding: 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.1), inset -2px -2px 5px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+        }
+        .menu-card:active {
+            transform: scale(0.98);
+        }
+        .icon-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);
+        }
+        .menu-text {
+            font-weight: 700;
+            font-size: 15px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        /* Table View */
+        #tableView { display: none; }
+        .table-wrapper {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            overflow-x: auto;
+            max-height: 60vh;
+            border: 1px solid #000;
+        }
+        table { border-collapse: collapse; width: max-content; }
+        th, td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: center;
+            font-size: 13px;
+        }
+        th { background: #f2f2f2; position: sticky; top: 0; z-index: 5; }
+        /* Navigation Buttons */
+        .footer-nav {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .btn-nav {
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 5px 5px 10px #b8b9be, -5px -5px 10px #ffffff;
+            transition: 0.3s;
+        }
+        .btn-back-main { background: #34495e; color: white; }
+        .btn-home { background: #1a73e8; color: white; }
+        .powered-by {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #7f8c8d;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="menuView">
+    <div class="header-box">
+        <i class="fas fa-server fa-2x" style="color: #0d47a1; margin-bottom: 10px;"></i>
+        <h2>চেক লিস্ট মেনু (CDAA)</h2>
+    </div>
+    <div class="paste-area">
+        <textarea id="dataInput" placeholder="BBC হতে কপি করা ডাটা এখানে পেস্ট করুন..."></textarea>
+        <button class="btn-process" onclick="processPaste()">লোড ডাটা</button>
+    </div>
+    <div id="buttonContainer"></div>
+    <div class="footer-nav">
+        <div onclick="navigateWithCacheBusting('file_CDA.html')" class="btn-nav btn-back-main">আগের পেইজে ফিরে যান</div>
+        <div onclick="navigateWithCacheBusting('index.html')" class="btn-nav btn-home">হোম মেনুতে ফিরে যান</div>
+    </div>
+    <div class="powered-by">POWERED BY PALASH MAHMOD</div>
+</div>
+
+<div id="tableView">
+    <div class="header-box"><h2 id="tableTitle"></h2></div>
+    <div class="table-wrapper">
+        <table id="displayTable">
+            <thead id="tableHead"></thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+    <div class="footer-nav">
+        <div onclick="showMenu()" class="btn-nav btn-back-main">তালিকায় ফিরে যান</div>
+        <div onclick="navigateWithCacheBusting('file_CDA.html')" class="btn-nav btn-back-main" style="background: #546e7a;">আগের পেইজে ফিরে যান</div>
+        <div onclick="navigateWithCacheBusting('index.html')" class="btn-nav btn-home">হোম মেনুতে ফিরে যান</div>
+    </div>
+    <div class="powered-by">POWERED BY PALASH MAHMOD</div>
+</div>
+
+<script>
+    const colNames = ["রোল", "নাম", "বাঃ ১ CQ", "বাঃ ১ MCQ", "বাঃ ১ মোট", "বাঃ ২ CQ", "বাঃ ২ MCQ", "বাঃ ২ মোট", "বাংলা গ্রেড", "ইং ১", "ইং ২", "ইং গ্রেড", "ধর্ম CQ", "ধর্ম MCQ", "ধর্ম মোট", "ধর্ম গ্রেড", "গণিত CQ", "গণিত MCQ", "গণিত মোট", "গণিত গ্রেড", "বিজ্ঞান CQ", "বিজ্ঞান MCQ", "বিজ্ঞান মোট", "বিজ্ঞান গ্রেড", "বাঃবিঃ CQ", "বাঃবিঃ MCQ", "বাঃবিঃ মোট", "বাঃবিঃ গ্রেড", "তথ্য CQ", "তথ্য PRAC", "তথ্য মোট", "তথ্য গ্রেড", "মোট নম্বর", "GPA", "মেধাস্থান", "মেধানুসারে রোল", "উপবৃত্তি", "রেজি নং", "জন্মতারিখ", "ফাঁকা", "অন্যান্য"];
+    
+    const buttons = [
+        { name: "বাংলা ফলাফল", cols: [1,2,3,4,5,6,7,8,9], icon: "fa-book" },
+        { name: "ইংরেজি ফলাফল", cols: [1,2,10,11,12], icon: "fa-font" },
+        { name: "ধর্ম ও নৈতিকতা", cols: [1,2,13,14,15,16], icon: "fa-pray" },
+        { name: "গণিত সমাধান", cols: [1,2,17,18,19,20], icon: "fa-calculator" },
+        { name: "বিজ্ঞান বিভাগ", cols: [1,2,21,22,23,24], icon: "fa-flask" },
+        { name: "বাঃ ও বিশ্বপরিচয়", cols: [1,2,25,26,27,28], icon: "fa-globe-asia" },
+        { name: "তথ্য ও প্রযুক্তি", cols: [1,2,29,30,31,32], icon: "fa-desktop" },
+        { name: "মেধাস্থান ও GPA", cols: [1,2,33,34,35], icon: "fa-trophy" },
+        { name: "ব্যক্তিগত তথ্যাদি", cols: [1,2,37,38,39], icon: "fa-id-card" },
+        { name: "অন্যান্য তথ্য", type: "special", icon: "fa-list-ol" }
+    ];
+
+    function navigateWithCacheBusting(page) {
+        const timestamp = new Date().getTime();
+        window.location.href = page + "?v=" + timestamp;
+    }
+
+    function processPaste() {
+        const input = document.getElementById('dataInput').value.trim();
+        if(!input) return alert("ডাটা পেস্ট করুন!");
+        const rows = input.split('\n').map(l => l.split('\t'));
+        localStorage.setItem('cdaa_pasted_data', JSON.stringify(rows));
+        alert("ডাটা সফলভাবে লোড হয়েছে!");
+        document.getElementById('dataInput').value = "";
+    }
+
+    function initButtons() {
+        document.getElementById('buttonContainer').innerHTML = buttons.map((btn, i) => `
+            <div class="menu-card" onclick="openTable(${i})">
+                <div class="icon-circle"><i class="fas ${btn.icon}"></i></div>
+                <div class="menu-text">${btn.name}</div>
+            </div>
+        `).join('');
+    }
+
+    function openTable(idx) {
+        const data = JSON.parse(localStorage.getItem('cdaa_pasted_data'));
+        if(!data) return alert("ডাটা নেই!");
+        const btn = buttons[idx];
+        document.getElementById('menuView').style.display = 'none';
+        document.getElementById('tableView').style.display = 'block';
+        document.getElementById('tableTitle').innerText = btn.name;
+        if(btn.type === "special") renderSpecial(data);
+        else renderRegular(btn.cols, data);
+        window.scrollTo(0,0);
+    }
+
+    function renderRegular(cols, data) {
+        document.getElementById('tableHead').innerHTML = `<tr>${cols.map(c => `<th>${c}৷ ${colNames[c-1]}</th>`).join('')}</tr>`;
+        document.getElementById('tableBody').innerHTML = data.map(row => `<tr>${cols.map(c => `<td>${row[c-1] || ""}</td>`).join('')}</tr>`).join('');
+    }
+
+    function renderSpecial(data) {
+        const labels = ["রেজাল্ট কার্ডের টাইটেল", "শ্রেণি", "শাখা/বিভাগ", "মোট শিক্ষার্থী", "উপস্থিত শিক্ষার্থী", "কৃতকার্য শিক্ষার্থী", "অকৃতকার্য শিক্ষার্থী", "অনুপস্থিত শিক্ষার্থী", "পাশের হার", "ফলাফল বিবরণী সিটের টাইটেল"];
+        document.getElementById('tableHead').innerHTML = `<tr><th>ক্রমিক</th><th>বিষয়বস্তু</th><th>তথ্য</th></tr>`;
+        let html = "";
+        labels.forEach((label, i) => {
+            let row = data[i] || [];
+            let lastVal = row.length > 0 ? row[row.length - 1].trim() : "—";
+            html += `<tr><td>${i+1}</td><td style="text-align:left; font-weight:bold;">${label}</td><td style="color:#0d47a1; font-weight:bold;">${lastVal}</td></tr>`;
+        });
+        document.getElementById('tableBody').innerHTML = html;
+    }
+
+    function showMenu() {
+        document.getElementById('menuView').style.display = 'block';
+        document.getElementById('tableView').style.display = 'none';
+    }
+
+    initButtons();
+
+    // ব্যাক বাটন হ্যান্ডেলিং (Cache Busting সহ)
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        navigateWithCacheBusting('file_CDA.html');
+    };
+</script>
+</body>
+</html>
